@@ -7,8 +7,18 @@ const eyeRange = 100;
 const Game = new function() {
   const This = {
     walls: WallConstructor(),
-    entities: EntityConstructor()
+    entities: EntityConstructor(),
+    update: update,
   }
+
+  function update() {
+    for (entity of This.entities) entity.update();
+    Drawer.update();
+    setTimeout(Game.update, 10);
+  }
+
+
+
 
 
 
@@ -49,8 +59,10 @@ function EntityConstructor() {
       x: _x, 
       y: _y, 
       angle: _angle, 
-      eyes: _eyes
-    });
+      eyes: _eyes,
+    }, 
+    [3, 5, 5, 5]
+    );
 
     Entities.push(entity);
     return entity;
@@ -85,25 +97,9 @@ Game.walls.addWall(40, 70, 20, 70);
 
 
 Game.entities.addEntity(100, 100, Math.PI, 200);
+Game.entities.addEntity(200, 200, 0, 50);
 
 Drawer.update();
-
-
-
-
-
-Drawer.canvas.onmousemove = function(_e) {
-  Game.entities[0].x = _e.offsetX;
-  Game.entities[0].y = _e.offsetY;
-
-  Drawer.update();
-}
-
-
-
-
-
-
 
 
 
