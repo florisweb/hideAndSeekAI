@@ -28,7 +28,7 @@ const Trainer = new function() {
     Game.entities.clear();
     for (DNA of _DNAlist)
     {
-      Game.entities.addEntity(100, 100, Math.PI, 10, DNA);
+      Game.entities.addEntity(200, 200, Math.PI, 10, DNA);
     }
 
     Game.runXUpdates(250, function () {

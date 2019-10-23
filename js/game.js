@@ -122,10 +122,14 @@ Game.walls.addWall(Drawer.canvas.width, 0, wallThickness, Drawer.canvas.height);
 
 
 
-Game.walls.addWall(40, 40, 90, 30);
-Game.walls.addWall(40, 70, 20, 70);
+Game.walls.addWall(50, 40, 250, 30);
+Game.walls.addWall(40, 70, 20, 110);
 Game.walls.addWall(120, 70, 20, 70);
 Game.walls.addWall(40, 180, 90, 30);
+Game.walls.addWall(35, 200, 20, 30);
+Game.walls.addWall(35, 270, 20, 50);
+
+Game.walls.addWall(180, 100, 20, 200);
 
 
 Game.entities.addEntity(100, 100, Math.PI, 100, [3, 5, 5, 5]);
