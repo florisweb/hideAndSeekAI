@@ -30,10 +30,16 @@ const Game = new function() {
     if (This.running) setTimeout(Game.run, This.frameRate);
   }
 
-  function runXUpdates(_x = 0) {
+  function runXUpdates(_x = 0, _onFinish) {
     update();
 
-    if (This.running && _x > 0) setTimeout(Game.runXUpdates, This.frameRate, _x - 1);
+    if (This.running && _x > 0) 
+      setTimeout(Game.runXUpdates, This.frameRate, _x - 1, _onFinish);
+    else 
+      try {
+        _onFinish();
+      }
+      catch (e) {console.error("An error accured:", e)}
   }
 
 

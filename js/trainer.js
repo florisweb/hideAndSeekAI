@@ -2,6 +2,7 @@
 const Trainer = new function() {
   const This = {
     doTrainingRound: doTrainingRound,
+    animateTrainingRound: animateTrainingRound,
     createRandomDNA: createRandomDNA
   }
 
@@ -23,15 +24,35 @@ const Trainer = new function() {
   }
 
 
-  function doTrainingRound(_DNAlist) {
+  function animateTrainingRound(_DNAlist) {
     Game.entities.clear();
     for (DNA of _DNAlist)
     {
       Game.entities.addEntity(100, 100, Math.PI, 10, DNA);
     }
 
-    for (let i = 0; i < 100; i++) Game.update();
+    Game.runXUpdates(250, function () {
+      window.list = selectEntities();
+      Trainer.animateTrainingRound(list);
+      console.log(window.list);
+    });
+  }
 
+  function doTrainingRound(_DNAlist) {    
+    Game.entities.clear();
+    for (DNA of _DNAlist)
+    {
+      Game.entities.addEntity(100, 100, Math.PI, 10, DNA);
+    }
+
+    for (let i = 0; i < 250; i++) Game.update();
+
+    return selectEntities();
+  }
+
+
+
+  function selectEntities() {
     let totalScore = 0;
     for (entity of Game.entities)
     {
@@ -44,7 +65,7 @@ const Trainer = new function() {
       return -1;
     });
     
-    console.warn("Best", window.best = Game.entities[0], "Average: ", totalScore / _DNAlist.length);
+    console.warn("Best", window.best = Game.entities[0], "Average: ", totalScore / Game.entities.length);
 
     let newDNA = [];
     
