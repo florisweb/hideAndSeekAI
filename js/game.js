@@ -48,11 +48,12 @@ function EntityConstructor() {
   const Entities = [];
 
 
-  Entities.addEntity = function(_x, _y, _angle) {
+  Entities.addEntity = function(_x, _y, _angle, _eyes) {
     let entity = {
       x: _x,
       y: _y,
       angle: _angle,
+      eyes: _eyes
     }
 
     Entities.push(entity);
@@ -87,7 +88,7 @@ Game.walls.addWall(20, 20, 50, 30);
 Game.walls.addWall(40, 70, 20, 70);
 
 
-Game.entities.addEntity(100, 100, Math.PI * 1.5);
+Game.entities.addEntity(100, 100, Math.PI * .8, 10);
 
 Drawer.drawWalls(Game.walls);
 Drawer.drawEntities(Game.entities);
