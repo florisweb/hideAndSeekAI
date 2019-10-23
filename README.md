@@ -1,2 +1,2 @@
-# hideAndSeekAI
-An competitive AI experiment about the game hide and seek
+# 3InARowAI
+A competitive AI implementation of the Three in a row-game
