@@ -14,6 +14,7 @@ const Game = new function() {
 
     running: true,
     updates: 0,
+    frameRate: 10,
   }
 
 
@@ -26,13 +27,13 @@ const Game = new function() {
   function run() {
     update();
     
-    if (This.running) setTimeout(Game.run, 10);
+    if (This.running) setTimeout(Game.run, This.frameRate);
   }
 
   function runXUpdates(_x = 0) {
     update();
 
-    if (This.running && _x > 0) setTimeout(Game.runXUpdates, 10, _x - 1);
+    if (This.running && _x > 0) setTimeout(Game.runXUpdates, This.frameRate, _x - 1);
   }
 
 

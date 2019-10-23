@@ -20,24 +20,31 @@ const Collision = new function() {
 	}
 
 	function applyFactor(_entity, _factor) {
-		let fx = Math.cos(_factor.angle) * _factor.power;
-		let fy = -Math.sin(_factor.angle) * _factor.power;
+		const applyConstant = 1;
+		let fx = Math.cos(_factor.angle) * _factor.power * applyConstant;
+		let fy = -Math.sin(_factor.angle) * _factor.power * applyConstant;
 
 		return {x: _entity.x + fx, y: _entity.y + fy};
 	}
 
 	function calcFactor(_entity) {
 		let factors = getAllEntityFactors(_entity);
+		return averageFactors(factors);
+	}
+
+
+	function averageFactors(_factors) {
 		let sumFactor = {
 			angle: 0,
 			power: 0
 		};
 
-		for (factor of factors)
+		for (factor of _factors)
 		{
 			sumFactor = addFactors(sumFactor, factor);
 		}
 
+		if (_factors.length > 0) sumFactor.power /= _factors.length;
 		return sumFactor;
 	}
 
@@ -49,8 +56,6 @@ const Collision = new function() {
 
 		let newX = f1x + f2x;
 		let newY = f1y + f2y;
-
-	
 
 		return {
 			angle: atanWithDX(newX, newY),
@@ -70,7 +75,7 @@ const Collision = new function() {
 			let curAngle = _self.angle - factorAngleRange + factorAngleRange * 2 / samples * i;
 			let value = _self.getEyeValue(curAngle) * eyeRange;
 			
-			if (value > entityRadius / 2) continue;
+			if (value >= entityRadius) continue;
 						
 			let factor = {
 				angle: curAngle,
