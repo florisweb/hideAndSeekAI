@@ -1,0 +1,81 @@
+
+const Collision = new function() {
+	const This = {
+		calcFactor: calcFactor,
+		addFactors: addFactors,
+		apply: apply,
+		getAllEntityFactors: getAllEntityFactors,
+	}
+
+	function apply(_entity) {
+		let coords = applyFactor(_entity, calcFactor(_entity));
+		_entity.x = coords.x;
+		_entity.y = coords.y;
+	}
+
+	function applyFactor(_entity, _factor) {
+		let fx = Math.cos(_factor.angle) * _factor.power;
+		let fy = -Math.sin(_factor.angle) * _factor.power;
+
+		return {x: _entity.x + fx, y: _entity.y + fy};
+	}
+
+	function calcFactor(_entity) {
+		let factors = getAllEntityFactors(_entity);
+		let sumFactor = {
+			angle: 0,
+			power: 0
+		};
+
+		for (factor of factors)
+		{
+			sumFactor = addFactors(sumFactor, factor);
+		}
+
+		return sumFactor;
+	}
+
+	function addFactors(_factor1, _factor2) {
+		let f1x = Math.cos(_factor1.angle) 	* _factor1.power;
+		let f1y = -Math.sin(_factor1.angle) * _factor1.power;
+		let f2x = Math.cos(_factor2.angle) 	* _factor2.power;
+		let f2y = -Math.sin(_factor2.angle) * _factor2.power;
+
+		let newX = f1x + f2x;
+		let newY = f1y + f2y;
+
+	
+
+		return {
+			angle: atanWithDX(newX, newY),
+			power: Math.sqrt(newX * newX + newY * newY)
+		}
+	}
+
+
+	function getAllEntityFactors(_self) {
+		let eyeData = _self.getEyeData();
+		let factors = [];
+		
+		for (let e = 0; e < eyeData.length; e++)
+		{
+			if (eyeData[e] * eyeRange > entityRadius) continue;
+			let factor = {
+				angle: Math.PI * 2 / _self.eyes * e,
+				power: entityRadius - eyeData[e] * eyeRange
+			}
+			factors.push(factor);
+		}
+		return factors;
+	}
+
+	return This;
+}
+
+
+function atanWithDX(dx, dy) {
+	let angle = -Math.atan(dy / dx);
+	if (isNaN(angle)) angle = 0;
+	if (dx < 0) angle += Math.PI;
+	return angle;
+}

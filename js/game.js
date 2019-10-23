@@ -9,14 +9,31 @@ const Game = new function() {
     walls: WallConstructor(),
     entities: EntityConstructor(),
     update: update,
+    run: run,
+    runXUpdates: runXUpdates,
+
+    running: true,
+    updates: 0,
   }
+
 
   function update() {
     for (entity of This.entities) entity.update();
     Drawer.update();
-    setTimeout(Game.update, 10);
+    This.updates++;
   }
 
+  function run() {
+    update();
+    
+    if (This.running) setTimeout(Game.run, 10);
+  }
+
+  function runXUpdates(_x = 0) {
+    update();
+
+    if (This.running && _x > 0) setTimeout(Game.runXUpdates, 10, _x - 1);
+  }
 
 
 
@@ -53,21 +70,23 @@ function WallConstructor() {
 function EntityConstructor() {
   const Entities = [];
 
-
-  Entities.addEntity = function(_x, _y, _angle, _eyes) {
-   let entity = new entityConstructor({
+  Entities.addEntity = function(_x, _y, _angle, _eyes, _brainDNA) {
+    let entity = new entityConstructor({
       x: _x, 
       y: _y, 
       angle: _angle, 
       eyes: _eyes,
     }, 
-    [3, 5, 5, 5]
+    _brainDNA
     );
 
     Entities.push(entity);
     return entity;
   }
 
+  Entities.clear = function() {
+    Entities.splice(0, Entities.length);
+  }
   
   return Entities;
 }
@@ -82,11 +101,12 @@ function EntityConstructor() {
 
 
 // Add the world walls
-Game.walls.addWall(0, 0, Drawer.canvas.height, 1);
-Game.walls.addWall(0, Drawer.canvas.height - 1, Drawer.canvas.height, 1);
+const wallThickness = 50;
+Game.walls.addWall(0, -wallThickness, Drawer.canvas.width * 2, wallThickness);
+Game.walls.addWall(0, Drawer.canvas.height, Drawer.canvas.width, wallThickness);
 
-Game.walls.addWall(0, 0, 1, Drawer.canvas.height);
-Game.walls.addWall(Drawer.canvas.width - 1, 0, 1, Drawer.canvas.height);
+Game.walls.addWall(-wallThickness, 0, wallThickness, Drawer.canvas.height);
+Game.walls.addWall(Drawer.canvas.width, 0, wallThickness, Drawer.canvas.height);
 
 
 
@@ -96,10 +116,14 @@ Game.walls.addWall(20, 20, 50, 30);
 Game.walls.addWall(40, 70, 20, 70);
 
 
-Game.entities.addEntity(100, 100, Math.PI, 200);
-Game.entities.addEntity(200, 200, 0, 50);
+Game.entities.addEntity(100, 100, Math.PI, 10, [3, 5, 5, 5]);
 
 Drawer.update();
+
+
+list = Trainer.createRandomDNA();
+
+
 
 
 
