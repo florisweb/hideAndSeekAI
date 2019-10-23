@@ -10,6 +10,7 @@ function entityConstructor(_data, _brainDNA) {
     DNA: _brainDNA,
 
     getEyeData: getEyeData,
+    getEyeValue: getEyeValue,
     update: update,
   }
   
@@ -31,7 +32,7 @@ function entityConstructor(_data, _brainDNA) {
     let ry = -Math.sin(This.angle) * outputs[0] * movementConstant;
     This.x += rx;
     This.y += ry;
-    // Collision.apply(This);
+    Collision.apply(This);
   }
   
 

@@ -47,6 +47,9 @@ const Game = new function() {
 
 
 
+
+
+
 function WallConstructor() {
   const Walls = [];
 
@@ -112,16 +115,18 @@ Game.walls.addWall(Drawer.canvas.width, 0, wallThickness, Drawer.canvas.height);
 
 
 
-Game.walls.addWall(20, 20, 50, 30);
+Game.walls.addWall(40, 40, 90, 30);
 Game.walls.addWall(40, 70, 20, 70);
+Game.walls.addWall(120, 70, 20, 70);
+Game.walls.addWall(40, 180, 90, 30);
 
 
-Game.entities.addEntity(100, 100, Math.PI, 10, [3, 5, 5, 5]);
+Game.entities.addEntity(100, 100, Math.PI, 100, [3, 5, 5, 5]);
 
 Drawer.update();
 
 
-list = Trainer.createRandomDNA();
+list = Trainer.createRandomDNA(100);
 
 
 

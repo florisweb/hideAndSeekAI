@@ -27,20 +27,24 @@ const Trainer = new function() {
     Game.entities.clear();
     for (DNA of _DNAlist)
     {
-      Game.entities.addEntity(100, 100, 0, 10, DNA);
+      Game.entities.addEntity(100, 100, Math.PI, 10, DNA);
     }
 
     for (let i = 0; i < 100; i++) Game.update();
 
+    let totalScore = 0;
     for (entity of Game.entities)
     {
       entity.score = evaluateEntity(entity);
+      totalScore += entity.score;
     }    
 
     Game.entities.sort(function (a, b) {
       if (a.score < b.score) return 1;
       return -1;
     });
+    
+    console.warn("Best", window.best = Game.entities[0], "Average: ", totalScore / _DNAlist.length);
 
     let newDNA = [];
     
@@ -61,7 +65,7 @@ const Trainer = new function() {
 
   function evaluateEntity(_entity) {
     let distance = Math.sqrt(
-      Math.pow((_entity.x - 250), 2) + Math.pow((_entity.y - 250), 2)
+      Math.pow((_entity.x - 0), 2) + Math.pow((_entity.y - 0), 2)
     );
     return 100 / distance;
   }

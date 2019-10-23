@@ -8,7 +8,13 @@ const Collision = new function() {
 	}
 
 	function apply(_entity) {
-		let coords = applyFactor(_entity, calcFactor(_entity));
+		let factor = calcFactor(_entity);
+		let coords = applyFactor(_entity, factor);
+		if (coords.x < 0) coords.x = 0;
+		if (coords.y < 0) coords.y = 0;
+		if (coords.x > Drawer.canvas.width) coords.x = Drawer.canvas.width;
+		if (coords.y > Drawer.canvas.height) coords.y = Drawer.canvas.height;
+		
 		_entity.x = coords.x;
 		_entity.y = coords.y;
 	}
@@ -54,18 +60,26 @@ const Collision = new function() {
 
 
 	function getAllEntityFactors(_self) {
-		let eyeData = _self.getEyeData();
+		const factorAngleRange = .4 * Math.PI;
+		const samples = 10;
+
 		let factors = [];
-		
-		for (let e = 0; e < eyeData.length; e++)
+
+		for (let i = 0; i < samples; i++)
 		{
-			if (eyeData[e] * eyeRange > entityRadius) continue;
+			let curAngle = _self.angle - factorAngleRange + factorAngleRange * 2 / samples * i;
+			let value = _self.getEyeValue(curAngle) * eyeRange;
+			
+			if (value > entityRadius / 2) continue;
+						
 			let factor = {
-				angle: Math.PI * 2 / _self.eyes * e,
-				power: entityRadius - eyeData[e] * eyeRange
+				angle: curAngle,
+				power: -(entityRadius - value)
 			}
+
 			factors.push(factor);
 		}
+
 		return factors;
 	}
 
