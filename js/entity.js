@@ -40,22 +40,22 @@ function entityConstructor(_data) {
 
 
   function projectRayOnWall(_rayAngle, _wall) {
-    for (let rayX = 0; rayX < eyeRange; rayX++)
+    let rayAngle = angleTo2PIRange(_rayAngle);
+
+    for (let rayS = 0; rayS < eyeRange; rayS++)
     {
-      let rayY = Math.tan(_rayAngle) * rayX;
+      let rayX = Math.cos(rayAngle) * rayS;
+      let rayY = -Math.sin(rayAngle) * rayS;
 
       let absoluteX = This.x + rayX;
-      if (_rayAngle > .5 * Math.PI && _rayAngle < 1.5 * Math.PI) absoluteX -= 2 * rayX;
-
       let absoluteY = This.y + rayY;
-      if (_rayAngle > 0 && _rayAngle < Math.PI) absoluteY -= 2 * rayY;
-
+      
       if (
         _wall.x <= absoluteX && 
         _wall.x + _wall.width >= absoluteX && 
         _wall.y <= absoluteY && 
         _wall.y + _wall.height >= absoluteY
-      ) return Math.sqrt(rayX * rayX + rayY * rayY);
+      ) return rayS;
     }
 
     return eyeRange;

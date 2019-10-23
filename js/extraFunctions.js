@@ -32,3 +32,10 @@ function shuffle(array) {
 
   return array;
 }
+
+
+function angleTo2PIRange(_angle) {
+  while (_angle > 2 * Math.PI) _angle -= Math.PI * 2;
+  while (_angle < 0) _angle += Math.PI * 2;
+  return _angle;
+}

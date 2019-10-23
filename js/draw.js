@@ -70,7 +70,7 @@ const Drawer = new function() {
     drawEntityAngleArrow(_entity);
 
     let eyeData = _entity.getEyeData();
-    for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, eyeData[i]);
+    for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, eyeData[i], i);
   }
 
 
@@ -101,7 +101,7 @@ const Drawer = new function() {
     ctx.stroke();
   }
 
-  function drawEntityEye(_entity, _angle, _eyeIndicatorValue) {
+  function drawEntityEye(_entity, _angle, _eyeIndicatorValue, _index) {
     let angle = _entity.angle + _angle;
 
     let relativeEyeX = Math.cos(angle) * eyeRange;
@@ -128,6 +128,7 @@ const Drawer = new function() {
     );
     ctx.closePath();
     ctx.fill();
+    ctx.fillText(_index, _entity.x + relativeIndicatorX, _entity.y + relativeIndicatorY - 10);
   }
 
 

@@ -84,12 +84,20 @@ Game.walls.addWall(20, 20, 50, 30);
 Game.walls.addWall(40, 70, 20, 70);
 
 
-Game.entities.addEntity(100, 100, Math.PI, 10);
+Game.entities.addEntity(100, 100, Math.PI, 3);
 
 Drawer.update();
 
 
 
+
+
+Drawer.canvas.onmousemove = function(_e) {
+  Game.entities[0].x = _e.offsetX;
+  Game.entities[0].y = _e.offsetY;
+
+  Drawer.update();
+}
 
 
 
