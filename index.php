@@ -22,6 +22,7 @@
 		<script src="js/extraFunctions.js"></script>
 		<script src="js/network/neuralNetwork.js"></script>
 		<script src="js/AI.js"></script>
+		<script src="js/entity.js"></script>
 		<script src="js/draw.js"></script>
 		<script src="js/game.js"></script>
 

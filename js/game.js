@@ -1,11 +1,7 @@
-const NoTeam = .5;
-const TeamA = -5;
-const TeamB = 5;
+const entityRadius = 10;
+const eyeRange = 100;
 
 
-// 0 = Player A
-// .5 = Empty
-// 1 = Player B
 
 
 const Game = new function() {
@@ -49,12 +45,12 @@ function EntityConstructor() {
 
 
   Entities.addEntity = function(_x, _y, _angle, _eyes) {
-    let entity = {
-      x: _x,
-      y: _y,
-      angle: _angle,
+   let entity = new entityConstructor({
+      x: _x, 
+      y: _y, 
+      angle: _angle, 
       eyes: _eyes
-    }
+    });
 
     Entities.push(entity);
     return entity;
@@ -88,11 +84,9 @@ Game.walls.addWall(20, 20, 50, 30);
 Game.walls.addWall(40, 70, 20, 70);
 
 
-Game.entities.addEntity(100, 100, Math.PI * .8, 10);
+Game.entities.addEntity(100, 100, Math.PI, 10);
 
-Drawer.drawWalls(Game.walls);
-Drawer.drawEntities(Game.entities);
-
+Drawer.update();
 
 
 

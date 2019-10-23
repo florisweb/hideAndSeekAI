@@ -11,6 +11,7 @@ const Drawer = new function() {
 
     drawEntities: drawEntities,
     drawEntity:   drawEntity,
+    update:       update
   }
 
   const ctx = This.canvas.getContext("2d");
@@ -29,6 +30,16 @@ const Drawer = new function() {
     );
     this.closePath();
   }
+
+
+
+  function update() {
+    ctx.clearRect(0, 0, This.canvas.width, This.canvas.height);
+    drawWalls(Game.walls);
+    drawEntities(Game.entities);
+  }
+
+
 
 
   function drawWalls(_walls) {
@@ -50,8 +61,6 @@ const Drawer = new function() {
     for (entity of _entities) drawEntity(entity);
   }
 
-  const entityRadius = 10;
-  const eyeRange = 100;
 
   function drawEntity(_entity) {
     ctx.strokeStyle = "#000";
@@ -60,8 +69,8 @@ const Drawer = new function() {
     ctx.stroke();
     drawEntityAngleArrow(_entity);
 
-
-    for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, Math.random());
+    let eyeData = _entity.getEyeData();
+    for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, eyeData[i]);
   }
 
 
@@ -104,6 +113,8 @@ const Drawer = new function() {
     ctx.lineTo(_entity.x + relativeEyeX, _entity.y + relativeEyeY);
     ctx.closePath();
     ctx.stroke();
+    ctx.lineWidth = 1;
+
 
     let relativeIndicatorX = Math.cos(angle) * eyeRange * _eyeIndicatorValue;
     let relativeIndicatorY = -Math.sin(angle) * eyeRange * _eyeIndicatorValue;
