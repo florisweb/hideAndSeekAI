@@ -70,7 +70,7 @@ const Drawer = new function() {
     drawEntityAngleArrow(_entity);
 
     let eyeData = _entity.getEyeData();
-    for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, eyeData[i], i);
+    for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, eyeData[i]);
   }
 
 
@@ -101,34 +101,22 @@ const Drawer = new function() {
     ctx.stroke();
   }
 
-  function drawEntityEye(_entity, _angle, _eyeIndicatorValue, _index) {
+  function drawEntityEye(_entity, _angle, _eyeIndicatorValue) {
     let angle = _entity.angle + _angle;
 
-    let relativeEyeX = Math.cos(angle) * eyeRange;
-    let relativeEyeY = -Math.sin(angle) * eyeRange;
+    let relativeStartEyeX = Math.cos(angle) * entityRadius;
+    let relativeStartEyeY = -Math.sin(angle) * entityRadius;
+
+    let relativeEyeX = Math.cos(angle) * eyeRange * _eyeIndicatorValue;
+    let relativeEyeY = -Math.sin(angle) * eyeRange * _eyeIndicatorValue;
     
     ctx.lineWidth = .1;
     ctx.beginPath();
-    ctx.moveTo(_entity.x, _entity.y);
+    ctx.moveTo(_entity.x + relativeStartEyeX, _entity.y + relativeStartEyeY);
     ctx.lineTo(_entity.x + relativeEyeX, _entity.y + relativeEyeY);
     ctx.closePath();
     ctx.stroke();
     ctx.lineWidth = 1;
-
-
-    let relativeIndicatorX = Math.cos(angle) * eyeRange * _eyeIndicatorValue;
-    let relativeIndicatorY = -Math.sin(angle) * eyeRange * _eyeIndicatorValue;
-
-    ctx.fillStyle = "#aaa";
-    ctx.beginPath();
-    ctx.circle(
-      _entity.x + relativeIndicatorX, 
-      _entity.y + relativeIndicatorY, 
-      entityRadius / 4
-    );
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillText(_index, _entity.x + relativeIndicatorX, _entity.y + relativeIndicatorY - 10);
   }
 
 

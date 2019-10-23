@@ -84,7 +84,7 @@ Game.walls.addWall(20, 20, 50, 30);
 Game.walls.addWall(40, 70, 20, 70);
 
 
-Game.entities.addEntity(100, 100, Math.PI, 3);
+Game.entities.addEntity(100, 100, Math.PI, 200);
 
 Drawer.update();
 
