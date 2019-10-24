@@ -1,3 +1,6 @@
+const Target = {x: 85, y: 100}
+const Spawn = {x: 230, y: 200}
+
 
 const Trainer = new function() {
   const This = {
@@ -17,7 +20,7 @@ const Trainer = new function() {
 
     for (let i = 0; i < _amount; i++)
     {
-      entities.push([3, 5, 5, 5]);
+      entities.push([2, 5, 3]);
     }
 
     return entities;
@@ -28,21 +31,23 @@ const Trainer = new function() {
     Game.entities.clear();
     for (DNA of _DNAlist)
     {
-      Game.entities.addEntity(200, 200, Math.PI, 10, DNA);
+      Game.entities.addEntity(Spawn.x, Spawn.y, Math.PI, 10, DNA);
     }
 
     Game.runXUpdates(250, function () {
       window.list = selectEntities();
-      Trainer.animateTrainingRound(list);
       console.log(window.list);
+
+      if (!Game.running) return;
+      Trainer.animateTrainingRound(list);
     });
   }
 
-  function doTrainingRound(_DNAlist) {    
+  function doTrainingRound(_DNAlist) {
     Game.entities.clear();
     for (DNA of _DNAlist)
     {
-      Game.entities.addEntity(100, 100, Math.PI, 10, DNA);
+      Game.entities.addEntity(Spawn.x, Spawn.y, Math.PI, 10, DNA);
     }
 
     for (let i = 0; i < 250; i++) Game.update();
@@ -85,10 +90,12 @@ const Trainer = new function() {
 
 
   function evaluateEntity(_entity) {
-    let distance = Math.sqrt(
-      Math.pow((_entity.x - 0), 2) + Math.pow((_entity.y - 0), 2)
-    );
-    return 100 / distance;
+    // let distance = Math.sqrt(
+    //   Math.pow((_entity.x - Target.x), 2) + Math.pow((_entity.y - Target.y), 2)
+    // );
+
+    // return 100 / distance;
+    return 100 / _entity.totalDistanceToTarget;
   }
 
 
