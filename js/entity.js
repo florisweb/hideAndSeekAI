@@ -1,22 +1,24 @@
 
-
-function entityConstructor(_data, _brainDNA) {
+function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
   let This = {
-    x: _data.x,
-    y: _data.y,
-    angle: _data.angle,
-    eyes: _data.eyes,
+    x: x,
+    y: y,
+    angle: angle,
+    eyes: eyes,
 
-    DNA: _brainDNA,
+    DNA: DNA,
+
+    type: type,
+    target: target,
+
 
     getEyeData: getEyeData,
     getEyeValue: getEyeValue,
     update: update,
     totalDistanceToTarget: 0
   }
-  
-  This.brain = createBrain(_brainDNA);
 
+  This.brain = createBrain(DNA);
 
 
 
@@ -26,7 +28,7 @@ function entityConstructor(_data, _brainDNA) {
 
 
     let distanceToTarget = Math.sqrt(
-      Math.pow((This.x - Target.x), 2) + Math.pow((This.y - Target.y), 2)
+      Math.pow((This.x - This.target.x), 2) + Math.pow((This.y - This.target.y), 2)
     ) / eyeRange;
     This.totalDistanceToTarget += distanceToTarget;
 
@@ -34,7 +36,7 @@ function entityConstructor(_data, _brainDNA) {
     
 
     inputs[1] = angleTo2PIRange(
-      atanWithDX(Target.x - This.x, Target.y - This.y)
+      atanWithDX(This.target.x - This.x, This.target.y - This.y)
     ) / Math.PI / 2;
     
     inputs[2] = angleTo2PIRange(

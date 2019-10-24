@@ -19,7 +19,16 @@ const Game = new function() {
 
 
   function update() {
-    for (entity of This.entities) entity.update();
+    for (let i = This.entities.length - 1; i >= 0; i--)
+    {
+      if (!This.entities[i].target) 
+      {
+        This.entities.splice(i, 1);
+        continue;
+      }
+      This.entities[i].update();
+    }
+
     Drawer.update();
     This.updates++;
   }
@@ -80,19 +89,49 @@ function WallConstructor() {
 function EntityConstructor() {
   const Entities = [];
 
-  Entities.addEntity = function(_x, _y, _angle, _eyes, _brainDNA) {
+  Entities.addEntity = function(_x, _y, _angle, _eyes, _brainDNA, _type = "seeker") {
     let entity = new entityConstructor({
       x: _x, 
       y: _y, 
       angle: _angle, 
       eyes: _eyes,
-    }, 
-    _brainDNA
-    );
+      DNA: _brainDNA,
+      type: _type,
+    });
+    
+    entity.target = findTarget(entity);
+    if (entity.target) entity.target.target = entity;
 
     Entities.push(entity);
     return entity;
   }
+
+
+  function findTarget(_entity) {
+    let entities = getAvailableTargets();
+    let target = false;
+    switch (_entity.type)
+    {
+      case "seeker": target = entities.hiders[0]; break;
+      default: target = entities.seekers[0]; break;
+    }
+    if (!target) return false;
+    return target;
+  }
+
+  
+  function getAvailableTargets() {
+    let availableEntities = [];
+    for (entity of Entities)
+    {
+      if (entity.target) continue;
+      availableEntities.push(entity);
+    }
+
+    return splitSeekersFromHiders(availableEntities);
+  }
+
+
 
   Entities.clear = function() {
     Entities.splice(0, Entities.length);
@@ -122,30 +161,21 @@ Game.walls.addWall(Drawer.canvas.width, 0, wallThickness, Drawer.canvas.height);
 
 
 
-Game.walls.addWall(50, 40, 250, 30);
-Game.walls.addWall(40, 70, 20, 110);
+Game.walls.addWall(50, 40, 150, 30);
+
+Game.walls.addWall(40, 70, 20, 30);
+Game.walls.addWall(40, 140, 20, 40);
+
 Game.walls.addWall(120, 70, 20, 70);
 Game.walls.addWall(40, 180, 90, 30);
-Game.walls.addWall(35, 200, 20, 30);
-Game.walls.addWall(35, 270, 20, 50);
 
-Game.walls.addWall(180, 100, 20, 200);
-
-
-Game.entities.addEntity(100, 100, Math.PI, 100, [3, 5, 5, 5]);
+Game.walls.addWall(180, 100, 20, 130);
 
 Drawer.update();
 
 
-list = Trainer.createRandomDNA(100);
 
-
-
-
-
-
-
-
+animatedList = Trainer.createRandomDNA(100);
 
 
 

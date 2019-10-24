@@ -38,4 +38,23 @@ function angleTo2PIRange(_angle) {
   while (_angle > 2 * Math.PI) _angle -= Math.PI * 2;
   while (_angle < 0) _angle += Math.PI * 2;
   return _angle;
+} 
+
+function splitSeekersFromHiders(_arr) {
+  let seekerArr = [];
+  let hiderArr = [];
+  for (entity of _arr)
+  {
+    if (entity.type == "seeker") 
+    {
+      seekerArr.push(entity);
+      continue;
+    }
+    hiderArr.push(entity);
+  }
+  return {
+    seekers: seekerArr,
+    hiders: hiderArr
+  }
 }
+

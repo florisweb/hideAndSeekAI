@@ -15,7 +15,7 @@
 		<br>
 		<a id="averageScoreHolder"></a>
 		<br>
-		<button onclick="Game.running = true; Trainer.animateTrainingRound(list)">Run</button>
+		<button onclick="Game.running = true; Trainer.animateTrainingRound(animatedList)">Run</button>
 		<button onclick="Game.running = false;">Stop</button>
 
 

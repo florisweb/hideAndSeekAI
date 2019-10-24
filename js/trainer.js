@@ -1,15 +1,21 @@
-const Target = {x: 85, y: 100}
-const Spawn = {x: 230, y: 200}
+
+
 
 
 const Trainer = new function() {
   const This = {
-    doTrainingRound: doTrainingRound,
+    doTrainingRound:      doTrainingRound,
     animateTrainingRound: animateTrainingRound,
-    createRandomDNA: createRandomDNA
+    createRandomDNA:      createRandomDNA,
+
+    runIndividualRound: runIndividualRound,
+
+    settings: {
+      seekerSpawn: {x: 230, y: 200},
+      hiderSpawn: {x: 95, y: 90},
+      updatesPerSession: 250,
+    }
   }
-
-
 
 
 
@@ -20,65 +26,101 @@ const Trainer = new function() {
 
     for (let i = 0; i < _amount; i++)
     {
-      entities.push([2, 5, 3]);
+      entities.push(
+        {
+          DNA: [2, 5, 3],
+          type: i >= _amount / 2 ? "seeker" : "hider"
+        }
+      );
     }
 
     return entities;
   }
 
 
-  function animateTrainingRound(_DNAlist) {
-    Game.entities.clear();
-    for (DNA of _DNAlist)
-    {
-      Game.entities.addEntity(Spawn.x, Spawn.y, Math.PI, 10, DNA);
-    }
+  function runIndividualRound(_entity) {
+    addEntities([
+      _entity,
+      _entity.target
+    ]);
+    Game.runXUpdates(This.settings.updatesPerSession);
+  }
 
-    Game.runXUpdates(250, function () {
-      window.list = selectEntities();
-      console.log(window.list);
+  function animateTrainingRound(_DNAlist) {
+    addEntities(_DNAlist);
+
+    Game.runXUpdates(This.settings.updatesPerSession, function () {
+      window.animatedList = selectEntities();
+      console.log(window.animatedList);
 
       if (!Game.running) return;
-      Trainer.animateTrainingRound(list);
+      Trainer.animateTrainingRound(window.animatedList);
     });
   }
 
-  function doTrainingRound(_DNAlist) {
-    Game.entities.clear();
-    for (DNA of _DNAlist)
-    {
-      Game.entities.addEntity(Spawn.x, Spawn.y, Math.PI, 10, DNA);
-    }
+  
 
-    for (let i = 0; i < 250; i++) Game.update();
+  function doTrainingRound(_DNAlist) {
+    addEntities(_DNAlist);
+
+    for (let i = 0; i < This.settings.updatesPerSession; i++) Game.update();
 
     return selectEntities();
+  }
+
+  function addEntities(_DNAlist) {
+    Game.entities.clear();
+    for (entity of _DNAlist)
+    {
+      if (entity.type == "seeker") Game.entities.addEntity(Trainer.settings.seekerSpawn.x, Trainer.settings.seekerSpawn.y, Math.PI, 10, entity.DNA, entity.type);
+      if (entity.type == "hider") Game.entities.addEntity(Trainer.settings.hiderSpawn.x, Trainer.settings.hiderSpawn.y, Math.PI, 10, entity.DNA, entity.type);
+    }
   }
 
 
 
   function selectEntities() {
-    let totalScore = 0;
+    let totalSeekerScore = 0;
+    let totalHiderScore = 0;
     for (entity of Game.entities)
     {
       entity.score = evaluateEntity(entity);
-      totalScore += entity.score;
+      switch (entity.type)
+      {
+        case "seeker":  totalSeekerScore  += entity.score; break;
+        default:        totalHiderScore   += entity.score; break;
+      }
     }    
 
-    Game.entities.sort(function (a, b) {
+    let entities = splitSeekersFromHiders(Game.entities);
+
+    entities.seekers.sort(function (a, b) {
       if (a.score < b.score) return 1;
       return -1;
     });
-    
-    console.warn("Best", window.best = Game.entities[0], "Average: ", totalScore / Game.entities.length);
+
+    entities.hiders.sort(function (a, b) {
+      if (a.score < b.score) return 1;
+      return -1;
+    });
+
+
+    console.warn(
+      "Best", window.best = Game.entities[0], 
+      "Average seeker: " + totalSeekerScore / entities.seekers.length,
+      "Average hider: " + totalHiderScore / entities.hiders.length
+    );
+
 
     let newDNA = [];
     
-    let topEntities = Game.entities.splice(0, Math.round(Game.entities.length / 2));
+    let topEntities = entities.seekers.splice(0, Math.round(entities.seekers.length / 2));
+    topEntities = topEntities.concat(entities.hiders.splice(0, Math.round(entities.hiders.length / 2)));
+
     for (entity of topEntities) 
     {
-      newDNA.push(entity.DNA);
-      newDNA.push(mutateBrain(entity.DNA));
+      newDNA.push({type: entity.type, DNA: entity.DNA});
+      newDNA.push({type: entity.type, DNA: mutateBrain(entity.DNA)});
     }
     return newDNA;
   }
@@ -87,15 +129,9 @@ const Trainer = new function() {
 
 
 
-
-
   function evaluateEntity(_entity) {
-    // let distance = Math.sqrt(
-    //   Math.pow((_entity.x - Target.x), 2) + Math.pow((_entity.y - Target.y), 2)
-    // );
-
-    // return 100 / distance;
-    return 100 / _entity.totalDistanceToTarget;
+    if (_entity.type == "seeker") return Trainer.settings.updatesPerSession / _entity.totalDistanceToTarget;
+    return _entity.totalDistanceToTarget / Trainer.settings.updatesPerSession;
   }
 
 

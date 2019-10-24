@@ -36,16 +36,7 @@ const Drawer = new function() {
   function update() {
     ctx.clearRect(0, 0, This.canvas.width, This.canvas.height);
     drawWalls(Game.walls);
-    drawTarget();
     drawEntities(Game.entities);
-  }
-
-
-  function drawTarget() {
-    ctx.strokeStyle = "#00f";
-
-    ctx.circle(Target.x, Target.y, 5);
-    ctx.stroke();
   }
 
 
@@ -70,7 +61,9 @@ const Drawer = new function() {
 
 
   function drawEntity(_entity) {
-    ctx.strokeStyle = "#000";
+    ctx.strokeStyle = "#00f";
+    if (_entity.type == "seeker") ctx.strokeStyle = "#f00";
+    drawEntityTargetLine(_entity);
 
     ctx.circle(_entity.x, _entity.y, entityRadius);
     ctx.stroke();
@@ -80,6 +73,17 @@ const Drawer = new function() {
     for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, eyeData[i]);
   }
 
+  function drawEntityTargetLine(_entity) {
+    ctx.lineWidth = .1;
+    ctx.beginPath();
+    
+    ctx.moveTo(_entity.x, _entity.y);
+    ctx.lineTo(_entity.target.x, _entity.target.y);
+    
+    ctx.closePath();
+    ctx.stroke();
+    ctx.lineWidth = 1;
+  }
 
   function drawEntityAngleArrow(_entity) {
     let rx1 = Math.cos(_entity.angle + Math.PI) * entityRadius / 2;
