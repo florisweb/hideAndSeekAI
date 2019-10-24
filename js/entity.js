@@ -32,11 +32,11 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
     );
     This.totalDistanceToTarget += distanceToTarget;
 
-    let inputs = [distanceToTarget / eyeRange];
+    let inputs = [distanceToTarget / Drawer.canvasDiagonal];
     
 
     inputs[1] = angleTo2PIRange(
-      atanWithDX(This.target.x - This.x, This.target.y - This.y)
+      atanWithDX(This.target.x - This.x, This.target.y - This.y) - This.angle
     ) / Math.PI / 2;
     
     inputs[2] = angleTo2PIRange(

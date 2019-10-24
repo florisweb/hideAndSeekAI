@@ -13,6 +13,8 @@ const Drawer = new function() {
     drawEntity:   drawEntity,
     update:       update
   }
+  
+  This.canvasDiagonal = Math.sqrt(This.canvas.width * This.canvas.width + This.canvas.height * This.canvas.height);
 
   const ctx = This.canvas.getContext("2d");
   ctx.constructor.prototype.circle = function(x, y, size) {
