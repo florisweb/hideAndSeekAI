@@ -10,11 +10,6 @@ const Collision = new function() {
 	function apply(_entity) {
 		let factor = calcFactor(_entity);
 		let coords = applyFactor(_entity, factor);
-		if (coords.x < 0) coords.x = 0;
-		if (coords.y < 0) coords.y = 0;
-		if (coords.x > Drawer.canvas.width) coords.x = Drawer.canvas.width;
-		if (coords.y > Drawer.canvas.height) coords.y = Drawer.canvas.height;
-		
 		_entity.x = coords.x;
 		_entity.y = coords.y;
 	}
