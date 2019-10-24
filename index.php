@@ -15,8 +15,8 @@
 		<br>
 		<a id="averageScoreHolder"></a>
 		<br>
-		<button onclick="running = true; run()">Run</button>
-		<button onclick="running = false;">Stop</button>
+		<button onclick="Game.running = true; Trainer.animateTrainingRound(list)">Run</button>
+		<button onclick="Game.running = false;">Stop</button>
 
 
 		<script src="js/extraFunctions.js"></script>
