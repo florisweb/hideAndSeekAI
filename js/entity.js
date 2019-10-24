@@ -12,6 +12,7 @@ function entityConstructor(_data, _brainDNA) {
     getEyeData: getEyeData,
     getEyeValue: getEyeValue,
     update: update,
+    totalDistanceToTarget: 0
   }
   
   This.brain = createBrain(_brainDNA);
@@ -20,11 +21,33 @@ function entityConstructor(_data, _brainDNA) {
 
 
   function update() {
-    const turnConstant = .5;
+    const turnConstant = Math.PI * 2;
     const movementConstant = 5;
 
+
+    let distanceToTarget = Math.sqrt(
+      Math.pow((This.x - Target.x), 2) + Math.pow((This.y - Target.y), 2)
+    ) / eyeRange;
+    This.totalDistanceToTarget += distanceToTarget;
+
+    let inputs = [distanceToTarget];
+    
+
+    inputs[1] = angleTo2PIRange(
+      atanWithDX(Target.x - This.x, Target.y - This.y)
+    ) / Math.PI / 2;
+    
+    inputs[2] = angleTo2PIRange(
+      This.angle
+    ) / Math.PI / 2;
+
+
+
     let eyeData = getEyeData();
-    let outputs = This.brain.feedForward(eyeData);
+    inputs = inputs.concat(eyeData);
+
+
+    let outputs = This.brain.feedForward(inputs);
 
     This.angle += (.5 - outputs[1]) * turnConstant;
    
@@ -32,6 +55,7 @@ function entityConstructor(_data, _brainDNA) {
     let ry = -Math.sin(This.angle) * outputs[0] * movementConstant;
     This.x += rx;
     This.y += ry;
+    
     Collision.apply(This);
   }
   
@@ -103,7 +127,7 @@ function entityConstructor(_data, _brainDNA) {
   function createBrain(_brainDNA) {
     const outputNeurons = 2;
 
-    let brainStructure = [This.eyes]; 
+    let brainStructure = [This.eyes + 3]; 
     let layers = Math.abs(Math.round(_brainDNA[0]));
 
     let newBrainDNA = Object.assign([], _brainDNA);
