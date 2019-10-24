@@ -29,10 +29,10 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
 
     let distanceToTarget = Math.sqrt(
       Math.pow((This.x - This.target.x), 2) + Math.pow((This.y - This.target.y), 2)
-    ) / eyeRange;
+    );
     This.totalDistanceToTarget += distanceToTarget;
 
-    let inputs = [distanceToTarget];
+    let inputs = [distanceToTarget / eyeRange];
     
 
     inputs[1] = angleTo2PIRange(
