@@ -11,9 +11,9 @@ const Trainer = new function() {
     runIndividualRound:   runIndividualRound,
     addEntities:          addEntities,
     settings: {
-      seekerSpawn: {x: 230, y: 200},
+      seekerSpawn: {x: 400, y: 400},
       hiderSpawn: {x: 95, y: 90},
-      updatesPerSession: 250,
+      updatesPerSession: 500,
     }
   }
 
@@ -51,7 +51,6 @@ const Trainer = new function() {
 
     Game.runXUpdates(This.settings.updatesPerSession, function () {
       window.animatedList = selectEntities();
-      console.log(window.animatedList);
 
       if (!Game.running) return;
       Trainer.animateTrainingRound(window.animatedList);
@@ -105,12 +104,23 @@ const Trainer = new function() {
     });
 
 
+    let bestSeekerScore = 1 / entities.seekers[0].score;
+    let bestHiderScore = entities.hiders[0].score;
+    let averageScore = totalHiderScore / entities.hiders.length;
+    
+    Statistics.update([
+      [bestSeekerScore, Drawer.canvasDiagonal], 
+      [bestHiderScore, Drawer.canvasDiagonal], 
+      [averageScore, Drawer.canvasDiagonal]
+    ]);
+    
     console.warn(
-      "BestSeeker: " + 1 / entities.seekers[0].score, window.bestSeeker = entities.seekers[0],
-      "BestHider: " + entities.hiders[0].score, window.bestHider = entities.hiders[0],
-      "Average distance: " + totalHiderScore / entities.hiders.length
+      "BestSeeker: " + bestSeekerScore, window.bestSeeker = entities.seekers[0],
+      "BestHider: " + bestHiderScore, window.bestHider = entities.hiders[0],
+      "Average distance: " + averageScore
     );
-
+    
+    
 
     let newDNA = [];
     
@@ -144,9 +154,10 @@ const Trainer = new function() {
   function mutateBrain(_brainDNA) {
     const mutationRate = .1;
     const mutationChance = .5;
+
     let newDNA = Object.assign([], _brainDNA);
 
-    for (let i = 3; i < newDNA.length; i++) 
+    for (let i = 0; i < newDNA.length; i++) 
     {
       if (Math.random() > mutationChance) continue;
       newDNA[i] += mutationRate - 2 * mutationRate * Math.random();
