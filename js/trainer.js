@@ -8,8 +8,8 @@ const Trainer = new function() {
     animateTrainingRound: animateTrainingRound,
     createRandomDNA:      createRandomDNA,
 
-    runIndividualRound: runIndividualRound,
-
+    runIndividualRound:   runIndividualRound,
+    addEntities:          addEntities,
     settings: {
       seekerSpawn: {x: 230, y: 200},
       hiderSpawn: {x: 95, y: 90},
@@ -106,9 +106,9 @@ const Trainer = new function() {
 
 
     console.warn(
-      "Best", window.best = Game.entities[0], 
-      "Average seeker: " + totalSeekerScore / entities.seekers.length,
-      "Average hider: " + totalHiderScore / entities.hiders.length
+      "BestSeeker: " + 1 / entities.seekers[0].score, window.bestSeeker = entities.seekers[0],
+      "BestHider: " + entities.hiders[0].score, window.bestHider = entities.hiders[0],
+      "Average distance: " + totalHiderScore / entities.hiders.length
     );
 
 
