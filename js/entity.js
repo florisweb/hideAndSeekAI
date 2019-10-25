@@ -10,12 +10,13 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
 
     type: type,
     target: target,
+    cought: false,
 
 
     getEyeData: getEyeData,
     getEyeValue: getEyeValue,
     update: update,
-    totalDistanceToTarget: 0
+    totalDistanceToTarget: 0,
   }
 
   This.brain = createBrain(DNA);
@@ -23,6 +24,8 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
 
 
   function update() {
+    if (This.cought) return;
+
     const turnConstant = Math.PI * 2;
     const movementConstant = 5;
 
@@ -30,6 +33,13 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
     let distanceToTarget = Math.sqrt(
       Math.pow((This.x - This.target.x), 2) + Math.pow((This.y - This.target.y), 2)
     );
+    
+    if (distanceToTarget < entityRadius * 2)
+    {
+      This.cought = true;
+      This.target.cought = true;
+    }
+    
     This.totalDistanceToTarget += distanceToTarget;
 
     let inputs = [distanceToTarget / Drawer.canvasDiagonal];
