@@ -30,6 +30,7 @@ const Game = new function() {
     }
 
     Drawer.update();
+    if (This.updates % NeuralDrawer.settings.updateEveryXFrames == 0) NeuralDrawer.drawNetwork(Game.entities[0].brain.layers);
     This.updates++;
   }
 
@@ -42,7 +43,7 @@ const Game = new function() {
   function runXUpdates(_x = 0, _onFinish) {
     update();
 
-    if (This.running && _x > 0) 
+    if (_x > 0) 
       setTimeout(Game.runXUpdates, This.frameRate, _x - 1, _onFinish);
     else 
       try {
@@ -136,6 +137,18 @@ function EntityConstructor() {
   Entities.clear = function() {
     Entities.splice(0, Entities.length);
   }
+
+  Entities.export = function() {
+    let entities = [];
+    for (entity of Entities)
+    {
+      entities.push({
+        DNA: entity.DNA,
+        type: entity.type
+      });
+    }
+    return entities;
+  }
   
   return Entities;
 }
@@ -158,18 +171,31 @@ Game.walls.addWall(-wallThickness, 0, wallThickness, Drawer.canvas.height);
 Game.walls.addWall(Drawer.canvas.width, 0, wallThickness, Drawer.canvas.height);
 
 
+const walls = Math.round(10 * Math.random());
+for (let i = 0; i < walls; i++) 
+{
+  Game.walls.addWall(
+    Drawer.canvas.width * Math.random(), 
+    Drawer.canvas.height * Math.random(),
+    200 * Math.random(),
+    200 * Math.random(),
+  );
+}
+
+// Game.walls.addWall(30, 30, 100, 20);
+
+// Game.walls.addWall(100, 120, 20, 50);
+// Game.walls.addWall(70, 250, 20, 40);
+
+// Game.walls.addWall(300, 100, 20, 70);
+// Game.walls.addWall(170, 180, 90, 30);
+
+// Game.walls.addWall(300, 300, 50, 130);
 
 
+// Game.walls.addWall(350, 350, 150, 20);
 
-Game.walls.addWall(50, 40, 150, 30);
 
-Game.walls.addWall(40, 70, 20, 30);
-Game.walls.addWall(40, 140, 20, 40);
-
-Game.walls.addWall(120, 70, 20, 70);
-Game.walls.addWall(40, 180, 90, 30);
-
-Game.walls.addWall(180, 100, 20, 130);
 
 Drawer.update();
 
@@ -179,6 +205,7 @@ animatedList = Trainer.createRandomDNA(100);
 
 
 
+// best battle: Game.running = true; Trainer.addEntities([bestHider, bestSeeker]); Game.runXUpdates(Trainer.settings.updatesPerSession);
 
 
 
