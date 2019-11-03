@@ -11,7 +11,11 @@ const Drawer = new function() {
 
     drawEntities: drawEntities,
     drawEntity:   drawEntity,
-    update:       update
+    update:       update,
+
+    settings: {
+      drawCoughtEntities: false
+    }
   }
   
   This.canvasDiagonal = Math.sqrt(This.canvas.width * This.canvas.width + This.canvas.height * This.canvas.height);
@@ -63,6 +67,9 @@ const Drawer = new function() {
 
 
   function drawEntity(_entity) {
+    if (_entity.cought && !This.settings.drawCoughtEntities) return;
+    if (_entity.cought) ctx.globalAlpha = .2;
+
     ctx.strokeStyle = "#00f";
     if (_entity.type == "seeker") ctx.strokeStyle = "#f00";
     drawEntityTargetLine(_entity);
@@ -73,6 +80,8 @@ const Drawer = new function() {
 
     let eyeData = _entity.getEyeData();
     for (let i = 0; i < _entity.eyes; i++) drawEntityEye(_entity, Math.PI * 2 / _entity.eyes * i, eyeData[i]);
+
+    ctx.globalAlpha = 1;
   }
 
   function drawEntityTargetLine(_entity) {
