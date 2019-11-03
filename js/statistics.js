@@ -24,15 +24,15 @@ const Statistics = new function() {
 	const xScale = 5;
 
 	function update(_data) {
-		console.log(_data, drawCursorX, canvasShift);		
-		if (drawCursorX > This.canvas.width)
+		drawGraphLines(_data);
+		
+		if (drawCursorX > This.canvas.width - xScale)
 		{
 			shiftCanvas(xScale);
 			canvasShift += xScale;
 		}
 
-		drawCursorX += xScale;
-		drawGraphLines(_data);
+		drawCursorX += xScale;	
 	}
 
 	function drawGraphLines(_graphLineValues) {
