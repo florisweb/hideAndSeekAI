@@ -164,11 +164,11 @@ function EntityConstructor() {
 
 // Add the world walls
 const wallThickness = 50;
-Game.walls.addWall(0, -wallThickness, Drawer.canvas.width * 2, wallThickness);
-Game.walls.addWall(0, Drawer.canvas.height, Drawer.canvas.width, wallThickness);
+Game.walls.addWall(0, -wallThickness - 1, Drawer.canvas.width * 2, wallThickness);
+Game.walls.addWall(0, Drawer.canvas.height + 1, Drawer.canvas.width, wallThickness);
 
-Game.walls.addWall(-wallThickness, 0, wallThickness, Drawer.canvas.height);
-Game.walls.addWall(Drawer.canvas.width, 0, wallThickness, Drawer.canvas.height);
+Game.walls.addWall(-wallThickness - 1, 0, wallThickness, Drawer.canvas.height);
+Game.walls.addWall(Drawer.canvas.width + 1, 0, wallThickness, Drawer.canvas.height);
 
 
 const walls = Math.round(10 * Math.random());
