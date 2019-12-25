@@ -10,7 +10,7 @@ const Trainer = new function() {
 
     addEntities:          addEntities,
     settings: {
-      seekerSpawn: {x: 400, y: 400},
+      seekerSpawn: {x: 600, y: 100},
       hiderSpawn: {x: 95, y: 90},
       updatesPerSession: 500,
     }

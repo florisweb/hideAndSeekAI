@@ -30,7 +30,15 @@ const Game = new function() {
   let generationAtStart = 0;
 
   function update() {
-    for (let i = This.entities.length - 1; i >= 0; i--) This.entities[i].update();
+    for (let i = This.entities.length - 1; i >= 0; i--)
+    {
+      if (!This.entities[i].target) 
+      {
+        This.entities.splice(i, 1);
+        continue;
+      }
+      This.entities[i].update();
+    }
 
     if (!This.turboMode) Drawer.update();
     
