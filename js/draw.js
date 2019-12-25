@@ -14,7 +14,7 @@ const Drawer = new function() {
     update:       update,
 
     settings: {
-      drawCoughtEntities: false
+      drawCaughtEntities: false
     }
   }
   
@@ -51,7 +51,7 @@ const Drawer = new function() {
   }
 
   function drawWall(_wall) {
-    ctx.strokeStyle = "#000";
+    ctx.strokeStyle = "#888";
     ctx.beginPath();
     ctx.strokeRect(_wall.x, _wall.y, _wall.width, _wall.height);
     ctx.closePath();
@@ -67,7 +67,7 @@ const Drawer = new function() {
 
 
   function drawEntity(_entity) {
-    if (_entity.cought && !This.settings.drawCoughtEntities) return;
+    if (_entity.cought && !This.settings.drawCaughtEntities) return;
     if (_entity.cought) ctx.globalAlpha = .2;
 
     ctx.strokeStyle = "#00f";

@@ -12,25 +12,50 @@ const Game = new function() {
     run: run,
     runXUpdates: runXUpdates,
 
+    turboTrain: turboTrain,
+    train: train,
+
     running: true,
     updates: 0,
+    generation: 0,
     frameRate: 10,
+
+    turboMode: false,
   }
 
 
+  let lastDate = new Date();
+  let lastUpdateCount = 0;
+  let timeSinceStart = new Date();
+  let generationAtStart = 0;
+
   function update() {
-    for (let i = This.entities.length - 1; i >= 0; i--)
+    for (let i = This.entities.length - 1; i >= 0; i--) This.entities[i].update();
+
+    if (!This.turboMode) Drawer.update();
+    
+    if (This.updates % NeuralDrawer.settings.updateEveryXFrames == 0) 
     {
-      if (!This.entities[i].target) 
+      This.generation = Math.round(This.updates / Trainer.settings.updatesPerSession * 10) / 10;
+      debugHolder.innerHTML = 
+        Math.round(window.fps * 10) / 10 + " fps <br>" + 
+        This.generation + " generations"; 
+      // NeuralDrawer.drawNetwork(Game.entities[0].brain.layers);
+
+      window.fps = (This.updates - lastUpdateCount) / (new Date() - lastDate) * 1000;
+      lastDate = new Date();
+      lastUpdateCount = This.updates;
+
+      if (This.turboMode) 
       {
-        This.entities.splice(i, 1);
-        continue;
+        let timeRunning = new Date() - timeSinceStart;
+        let deltaGeneration = This.generation - generationAtStart;
+
+        turbo_timePerGenHolder.innerHTML = "Time per generation: " + Math.round(timeRunning / deltaGeneration / 10) / 100 + "s";
+        turbo_runningFor.innerHTML = "Running for: " + Math.round(timeRunning / 1000) + "s";
       }
-      This.entities[i].update();
     }
 
-    Drawer.update();
-    if (This.updates % NeuralDrawer.settings.updateEveryXFrames == 0) NeuralDrawer.drawNetwork(Game.entities[0].brain.layers);
     This.updates++;
   }
 
@@ -51,6 +76,43 @@ const Game = new function() {
       }
       catch (e) {console.error("An error accured:", e)}
   }
+
+
+
+
+  function turboTrain(_DNA) {
+    Game.running = true;
+    Game.turboMode = true;
+    mainContent.classList.add('turboMode');
+    timeSinceStart = new Date();
+    generationAtStart = This.generation;
+
+    
+    let DNA = _DNA;
+    return run();
+
+    async function run() {
+      if (!Game.running) {mainContent.classList.remove('turboMode'); return DNA;}
+      DNA = await Trainer.doTrainingRound(DNA);
+      return run();
+    }
+  }
+
+
+  function train(_DNA) {
+    Game.running = true; 
+    Game.turboMode = false;
+    
+    let DNA = _DNA;
+    return run();
+
+    async function run() {
+      if (!Game.running) return DNA;
+      DNA = await Trainer.animateTrainingRound(DNA);
+      return run();
+    }
+  }
+
 
 
 
@@ -160,8 +222,6 @@ function EntityConstructor() {
 
 
 
-
-
 // Add the world walls
 const wallThickness = 50;
 Game.walls.addWall(0, -wallThickness - 1, Drawer.canvas.width * 2, wallThickness);
@@ -182,46 +242,11 @@ for (let i = 0; i < walls; i++)
   );
 }
 
-// Game.walls.addWall(30, 30, 100, 20);
-
-// Game.walls.addWall(100, 120, 20, 50);
-// Game.walls.addWall(70, 250, 20, 40);
-
-// Game.walls.addWall(300, 100, 20, 70);
-// Game.walls.addWall(170, 180, 90, 30);
-
-// Game.walls.addWall(300, 300, 50, 130);
-
-
-// Game.walls.addWall(350, 350, 150, 20);
-
-
 
 Drawer.update();
 
 
 
-animatedList = Trainer.createRandomDNA(100);
 
-
-
-// best battle: Game.running = true; Trainer.addEntities([bestHider, bestSeeker]); Game.runXUpdates(Trainer.settings.updatesPerSession);
-
-
-
-
-function createArray(_width, _height, _value) {
-  let arr = [];
-  for (let x = 0; x < _width; x++)
-  {
-    arr[x] = [];
-    for (let y = 0; y < _height; y++)
-    {
-      arr[x][y] = _value;
-    }
-  }
-
-  return arr;
-}
-
+let DNA = Trainer.createRandomDNA(100);
 

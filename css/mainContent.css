@@ -1,0 +1,68 @@
+
+
+#mainContent {
+	position: relative;
+	float: left;
+	
+	width: calc(100vw - 450px);
+	height: 100vh;
+
+	text-align: center;
+}
+
+#gameCanvasHolder {
+	position: absolute;
+	top: 0;
+	height: 100vh;
+	width: 100%;
+
+	transition: opacity .3s;
+}
+
+#mainContent.turboMode #gameCanvasHolder {
+	opacity: .2;
+}
+
+	#gameCanvas {
+		position: relative;
+		top: 30px;
+		margin: auto;
+
+		width: 100%;
+		max-width: calc(100vh - 30px * 2);
+
+		box-shadow: 5px 5px 20px 5px rgba(0, 0, 0, .1);
+	}
+
+
+
+
+
+#turboMenu {
+	position: relative;
+	margin: calc(50vh - 300px / 2) 0;
+	left: calc(50% - 150px);
+	width: 300px;
+	height: 300px;
+
+
+	opacity: 0;
+	transition: opacity .3s;
+}
+
+#mainContent.turboMode #turboMenu {
+	opacity: 1;
+}
+
+	#turboMenu .loadIcon {
+		position: relative;
+
+		
+		width: 100px;
+	}
+
+
+
+
+
+

@@ -5,6 +5,23 @@
 
 
 
+function createArray(_width, _height, _value) {
+  let arr = [];
+  for (let x = 0; x < _width; x++)
+  {
+    arr[x] = [];
+    for (let y = 0; y < _height; y++)
+    {
+      arr[x][y] = _value;
+    }
+  }
+
+  return arr;
+}
+
+
+
+
 
 function TwoDArrTo1D(_2dArr) {
 	let newArr = [];

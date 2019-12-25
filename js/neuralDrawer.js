@@ -8,7 +8,7 @@ const NeuralDrawer = new function() {
     
   	drawNetwork: drawNetwork,
   	settings: {
-  		updateEveryXFrames: 10
+  		updateEveryXFrames: 100
   	}
   }
   

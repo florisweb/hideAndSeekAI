@@ -1,0 +1,112 @@
+
+body {
+	position: fixed;
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	overflow: hide;
+}
+
+
+
+.loadIcon {
+	position: absolute;
+	width: 50px;
+	height: auto;
+	opacity: .3;
+}
+
+
+
+
+
+
+
+#sideBar {
+	position: relative;
+	float: left;
+
+	width: calc(450px - 30px * 2 - 20px * 2);
+	height: calc(100vh - 30px * 2 - 20px * 2);
+
+	margin: 30px;
+	padding: 20px;
+	/*box-shadow: 5px 5px 20px 5px rgba(0, 0, 0, .1);*/
+}
+
+
+	#networkCanvas {
+		position: relative;
+		float: right;
+		height: calc(50vh);
+	}
+
+
+	#populationGraph {
+		position: absolute;
+		
+		left: 0;
+		float: bottom;
+		bottom: 0;
+
+		width: calc(100%);
+		height: 250px;
+		border: 1px solid #eee;
+	}
+
+
+
+
+
+
+
+
+
+
+
+.text {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	color: #999;
+	font-size: 15px;
+}
+
+
+.text.header {
+	font-family: Verdana, Geneva, sans-serif;
+	color: #888;
+	font-size: 14px;
+	font-weight: bolder !important;
+}
+
+
+
+
+.clickable {cursor: pointer;}
+
+
+
+.button {
+	position: relative;
+	width: auto;
+	padding: 7px 15px !important;
+
+	border-radius: 30px;
+	font-size: 13px;
+
+	cursor: pointer;
+}
+	.button.bBoxy {
+		border-radius: 4px;	
+	}
+
+	.button.bDefault {
+		/*background: #7592BF !important;*/
+		background: rgb(140, 153, 247) !important;
+		color: #fff !important;
+	}
+	.button.bWarn {
+		background: #ff632c !important;
+		color: #fff !important;
+	}
+
+

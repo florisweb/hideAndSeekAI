@@ -1,71 +1,40 @@
 <!DOCTYPE html>
 <html>
 	<head>
+
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<link rel="stylesheet" type="text/css" href="css/mainContent.css">
 		<style>
-			body {
-				margin: 0;
-				padding: 0;
-			}
-			
-			#mainContent {
-				position: relative;
-				float: left;
-				width: calc(100vw - 450px);
-				height: 100vh;
-			}
-
-			#gameCanvas {
-				position: relative;
-				top: 30px;
-				left: calc((100% - (100vh - 30px * 2)) / 2);
-				height: calc(100vh - 30px * 2);
-				box-shadow: 5px 5px 20px 5px rgba(0, 0, 0, .1);
-			}
-			
-
-			#sideBar {
-				position: relative;
-				float: left;
-
-				width: calc(450px - 30px * 2 - 20px * 2);
-				height: calc(100vh - 30px * 2 - 20px * 2);
-
-				margin: 30px;
-				padding: 20px;
-				box-shadow: 5px 5px 20px 5px rgba(0, 0, 0, .1);
-			}
-
-
-				#networkCanvas {
-					position: relative;
-					float: right;
-					height: calc(50vh);
-				}
-
-
-				#populationGraph {
-					position: absolute;
-					
-					left: 0;
-					float: bottom;
-					bottom: 0;
-
-					width: calc(100%);
-					height: 250px;
-				}
+		
 		</style>
 		<title>Hide and Seek AI</title>
 	</head>
 	<body>
 
-		<div id="mainContent"> 
-			<canvas id="gameCanvas" width="800" height="800"></canvas>
+		<div id="mainContent">
+			<div id="turboMenu">
+				
+				<a class="text header" style="font-size: 15px">SPEEDMODE</a>
+				<br>
+				<br>
+				<img src="images/loadingDark.gif" class="loadIcon">
+				<br>
+				<a class="text" id="turbo_timePerGenHolder">Time per generation: 12s</a>
+				<br>
+				<a class="text" id="turbo_runningFor">Running for: </a>
+			</div>
+			<div id="gameCanvasHolder">
+				<canvas id="gameCanvas" width="800" height="800"></canvas>
+			</div>
 		</div>
 		
 		<div id="sideBar">	
 			<div id="header">
-				<button onclick="Game.running = true; Trainer.animateTrainingRound(animatedList)">Run</button>
+				<button onclick="Game.turboTrain(DNA).then(function (_DNA) {DNA = _DNA});">Turbo</button>
+				<button onclick="Game.train(DNA).then(function (_DNA) {DNA = _DNA});">Run</button>
 				<button onclick="Game.running = false;">Stop</button>
+				<br>
+				<a id="debugHolder"></a>
 			</div>
 			
 			
