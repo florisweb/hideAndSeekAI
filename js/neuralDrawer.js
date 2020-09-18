@@ -8,7 +8,7 @@ const NeuralDrawer = new function() {
     
   	drawNetwork: drawNetwork,
   	settings: {
-  		updateEveryXFrames: 100
+  		updateEveryXFrames: 20
   	}
   }
   
@@ -29,9 +29,9 @@ const NeuralDrawer = new function() {
     this.closePath();
   }
 
-  const layerWidth = 100;
+  const layerWidth = 180;
   const indexHeight = 50;
-  const nodeRadius = 15;
+  const nodeRadius = 22;
   const offsetX = 30;
 
   let curNetwork;
@@ -83,17 +83,19 @@ const NeuralDrawer = new function() {
 
 
   	ctx.fillStyle = "#fff";  	
-  	ctx.font = "12px Arial"; 
+  	ctx.font = Math.round(nodeRadius / 1.3) + "px Arial"; 
   	ctx.textAlign = "center";
   	ctx.beginPath();
+
+    let text = Math.round(_value * 100) / 100;
+    if (text < 1 && text > 0) text = String(text).substr(1, 10);
   	ctx.fillText(
-  		Math.round(_value * 100) / 100, 
+  		text,
   		coords.x,
   		coords.y + nodeRadius / 3 - 1
   	);
   	ctx.closePath();
   	ctx.fill();
-
   }
 
 
@@ -121,7 +123,7 @@ const NeuralDrawer = new function() {
 
   function valToColour(_value) {
   	let scaledVal = 127.5 - 255 * (_value / 2);
-  	return "rgb(" + scaledVal + ", " + scaledVal + "," + scaledVal +")";
+  	return "rgb(" + scaledVal + ", " + scaledVal + "," + scaledVal + ")";
   }
 
   function getXYFromLayerIndex(_layer, _index) {

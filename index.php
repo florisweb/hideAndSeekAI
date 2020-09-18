@@ -2,7 +2,7 @@
 <html>
 	<head>
 
-		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<link rel="stylesheet" type="text/css" href="css/main.css?a=2">
 		<link rel="stylesheet" type="text/css" href="css/mainContent.css">
 		<style>
 		
@@ -34,11 +34,11 @@
 				<button onclick="Game.train(DNA).then(function (_DNA) {DNA = _DNA});">Run</button>
 				<button onclick="Game.stop()" disabled='true'>Stop</button>
 				<br>
-				<a id="debugHolder"></a>
+				<div class='text' id="debugHolder"></div>
 			</div>
 			
 			
-			<canvas id="networkCanvas" width="500" height="800"></canvas>
+			<canvas id="networkCanvas" width="900" height="800"></canvas>
 			
 			
 
@@ -52,7 +52,7 @@
 		<script src="js/extraFunctions.js"></script>
 		<script src="js/network/neuralNetwork.js"></script>
 		<script src="js/statistics.js"></script>
-		<script src="js/neuralDrawer.js"></script>
+		<script src="js/neuralDrawer.js?a=2"></script>
 		<script src="js/collision.js"></script>
 		<script src="js/entity.js"></script>
 		<script src="js/draw.js"></script>

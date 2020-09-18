@@ -49,29 +49,30 @@ const Game = new function() {
 
     if (!This.turboMode) Drawer.update();
     
-    if (This.updates % NeuralDrawer.settings.updateEveryXFrames == 0) 
-    {
-      This.generation = Math.round(This.updates / Trainer.settings.updatesPerSession * 10) / 10;
-      debugHolder.innerHTML = 
-        Math.round(window.fps * 10) / 10 + " fps <br>" + 
-        This.generation + " generations"; 
-      // NeuralDrawer.drawNetwork(Game.entities[0].brain.layers);
-
-      window.fps = (This.updates - lastUpdateCount) / (new Date() - lastDate) * 1000;
-      lastDate = new Date();
-      lastUpdateCount = This.updates;
-
-      if (This.turboMode) 
-      {
-        let timeRunning = new Date() - timeSinceStart;
-        let deltaGeneration = This.generation - generationAtStart;
-
-        turbo_timePerGenHolder.innerHTML = "Time per generation: " + Math.round(timeRunning / deltaGeneration / 10) / 100 + "s";
-        turbo_runningFor.innerHTML = "Running for: " + Math.round(timeRunning / 1000) + "s";
-      }
-    }
-
     This.updates++;
+    if (This.updates % (NeuralDrawer.settings.updateEveryXFrames * (1 + 4 * This.turboMode)) != 0) return;
+  
+    This.generation       =   Math.round(This.updates / Trainer.settings.updatesPerSession * 10) / 10;
+    debugHolder.innerHTML =   Math.round(window.fps * 10) / 10 + " fps <br>" + 
+                              This.generation + " generations"; 
+    
+
+    window.fps      = (This.updates - lastUpdateCount) / (new Date() - lastDate) * 1000;
+    lastDate        = new Date();
+    lastUpdateCount = This.updates;
+
+    
+    if (!This.turboMode) 
+    {
+      NeuralDrawer.drawNetwork(Game.entities[0].brain.layers);
+      return;
+    }
+    
+    let timeRunning                   = new Date() - timeSinceStart;
+    let deltaGeneration               = This.generation - generationAtStart;
+
+    turbo_timePerGenHolder.innerHTML  = "Time per generation: " + Math.round(timeRunning / deltaGeneration / 10) / 100 + "s";
+    turbo_runningFor.innerHTML        = "Running for: " + Math.round(timeRunning / 1000) + "s";  
   }
 
   function run() {
@@ -114,7 +115,7 @@ const Game = new function() {
         mainContent.classList.remove('turboMode'); 
         return DNA;
       }
-      
+
       DNA = await Trainer.doTrainingRound(DNA);
       return run();
     }
@@ -149,7 +150,6 @@ const Game = new function() {
 
 
   function setButtonRunStatus(_running = false) {
-    console.log(window.h = HTML);
     HTML.turboButton.disabled = _running;
     HTML.startButton.disabled = _running;
     HTML.stopButton.disabled  = !_running;
