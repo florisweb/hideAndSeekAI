@@ -239,7 +239,7 @@ Game.walls.addWall(-wallThickness - 1, 0, wallThickness, Drawer.canvas.height);
 Game.walls.addWall(Drawer.canvas.width + 1, 0, wallThickness, Drawer.canvas.height);
 
 
-const walls = Math.round(10 * Math.random());
+const walls = Math.round(20 * Math.random());
 for (let i = 0; i < walls; i++) 
 {
   Game.walls.addWall(
@@ -256,5 +256,5 @@ Drawer.update();
 
 
 
-let DNA = Trainer.createRandomDNA(100);
+let DNA = Trainer.createRandomDNA(30);
 

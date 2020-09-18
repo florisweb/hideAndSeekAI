@@ -56,8 +56,8 @@
 		<script src="js/collision.js"></script>
 		<script src="js/entity.js"></script>
 		<script src="js/draw.js"></script>
-		<script src="js/trainer.js"></script>
-		<script src="js/game.js"></script>
+		<script src="js/trainer.js?a=1"></script>
+		<script src="js/game.js?a=2"></script>
 	</body>
 </html>
 
