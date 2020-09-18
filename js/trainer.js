@@ -25,7 +25,7 @@ const Trainer = new function() {
     {
       entities.push(
         {
-          DNA: [2, 5, 4],
+          DNA: [3, 10, 15, 8],
           type: i >= _amount / 2 ? "seeker" : "hider"
         }
       );
