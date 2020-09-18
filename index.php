@@ -34,6 +34,9 @@
 				<button onclick="Game.train(DNA).then(function (_DNA) {DNA = _DNA});">Run</button>
 				<button onclick="Game.stop()" disabled='true'>Stop</button>
 				<br>
+				<button onclick="Game.downloadData()">Download DNA</button>
+				<input type='file' id="dataInput" oninput='Game.loadData()'>
+				<br>
 				<div class='text' id="debugHolder"></div>
 			</div>
 			
@@ -49,7 +52,7 @@
 
 		<script src="/JS/jQuery.js"></script>
 
-		<script src="js/extraFunctions.js"></script>
+		<script src="js/extraFunctions.js?a=2"></script>
 		<script src="js/network/neuralNetwork.js"></script>
 		<script src="js/statistics.js"></script>
 		<script src="js/neuralDrawer.js?a=2"></script>

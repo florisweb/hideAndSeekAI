@@ -2,9 +2,6 @@
 
 
 
-
-
-
 function createArray(_width, _height, _value) {
   let arr = [];
   for (let x = 0; x < _width; x++)

@@ -9,10 +9,12 @@ const Game = new function() {
     turboButton:  $("#header button")[0],
     startButton:  $("#header button")[1],
     stopButton:   $("#header button")[2],
+
+    dataInput:    dataInput,
   }
 
   const This = {
-    walls: WallConstructor(),
+    walls:    WallConstructor(),
     entities: EntityConstructor(),
     update: update,
     run: run,
@@ -21,6 +23,9 @@ const Game = new function() {
 
     turboTrain: turboTrain,
     train: train,
+
+    downloadData: downloadData,
+    loadData:     loadData,
 
     running: true,
     updates: 0,
@@ -158,8 +163,77 @@ const Game = new function() {
 
 
 
+
+
+
+
+  function downloadData() {
+    let obj = {
+      DNA:          DNA,
+      generation:   This.generation,
+      walls:        This.walls
+    };
+
+    let data = [JSON.stringify(obj)];
+    var a = window.document.createElement('a');
+    a.href = window.URL.createObjectURL(new Blob(data, {type: 'text/txt'}));
+    a.download = 'DNA.txt';
+
+    // Append anchor to body.
+    document.body.appendChild(a);
+    a.click();
+
+    // Remove anchor from body
+    document.body.removeChild(a);
+  }
+
+  function loadData() {
+    let file = HTML.dataInput.files[0];
+    if (!file) return;
+
+    let reader = new FileReader();
+    reader.addEventListener('load', function(e) { 
+        let data = JSON.parse(e.target.result);
+        if (!data) return;
+        if (!data.DNA.length || data.DNA.length % 2 != 0) return alert("Invalid data-format");
+        
+        console.log(data);
+
+        DNA = data.DNA;
+        This.updates = Trainer.settings.updatesPerSession * data.generation;
+
+        This.walls = new WallConstructor();
+        for (wall of data.walls)
+        {
+          This.walls.addWall(
+            wall.x,
+            wall.y,
+            wall.width,
+            wall.height
+          );
+        }
+
+        alert("Successfully loaded DNA.")
+    });
+
+    // file reading failed
+    reader.addEventListener('error', function() {alert('Error : Failed to read file');});
+
+    // read as text file
+    reader.readAsText(file);
+  }
+
+
+
+
+
   return This;
 }
+
+
+
+
+
 
 
 
@@ -284,8 +358,6 @@ for (let i = 0; i < walls; i++)
 
 
 Drawer.update();
-
-
 
 
 let DNA = Trainer.createRandomDNA(30);
