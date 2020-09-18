@@ -212,7 +212,7 @@ const Game = new function() {
             wall.height
           );
         }
-
+        Drawer.update();
         alert("Successfully loaded DNA.")
     });
 
