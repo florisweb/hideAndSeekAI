@@ -5,11 +5,18 @@ const eyeRange = 100;
 
 
 const Game = new function() {
+  const HTML = {
+    turboButton:  $("#header button")[0],
+    startButton:  $("#header button")[1],
+    stopButton:   $("#header button")[2],
+  }
+
   const This = {
     walls: WallConstructor(),
     entities: EntityConstructor(),
     update: update,
     run: run,
+    stop: stopRunning,
     runXUpdates: runXUpdates,
 
     turboTrain: turboTrain,
@@ -69,7 +76,8 @@ const Game = new function() {
 
   function run() {
     update();
-    
+    setButtonRunStatus(true);
+  
     if (This.running) setTimeout(Game.run, This.frameRate);
   }
 
@@ -87,7 +95,6 @@ const Game = new function() {
 
 
 
-
   function turboTrain(_DNA) {
     Game.running = true;
     Game.turboMode = true;
@@ -97,10 +104,17 @@ const Game = new function() {
 
     
     let DNA = _DNA;
+    setButtonRunStatus(true);
     return run();
 
     async function run() {
-      if (!Game.running) {mainContent.classList.remove('turboMode'); return DNA;}
+      if (!Game.running) 
+      {
+        setButtonRunStatus(false);
+        mainContent.classList.remove('turboMode'); 
+        return DNA;
+      }
+      
       DNA = await Trainer.doTrainingRound(DNA);
       return run();
     }
@@ -112,16 +126,34 @@ const Game = new function() {
     Game.turboMode = false;
     
     let DNA = _DNA;
+    setButtonRunStatus(true);
     return run();
 
     async function run() {
-      if (!Game.running) return DNA;
+      if (!Game.running) 
+      {
+        setButtonRunStatus(false);
+        return DNA;
+      }
+
       DNA = await Trainer.animateTrainingRound(DNA);
       return run();
     }
   }
 
 
+
+  function stopRunning() {
+    This.running = false;
+  }
+
+
+  function setButtonRunStatus(_running = false) {
+    console.log(window.h = HTML);
+    HTML.turboButton.disabled = _running;
+    HTML.startButton.disabled = _running;
+    HTML.stopButton.disabled  = !_running;
+  }
 
 
 

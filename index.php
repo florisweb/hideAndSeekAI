@@ -32,7 +32,7 @@
 			<div id="header">
 				<button onclick="Game.turboTrain(DNA).then(function (_DNA) {DNA = _DNA});">Turbo</button>
 				<button onclick="Game.train(DNA).then(function (_DNA) {DNA = _DNA});">Run</button>
-				<button onclick="Game.running = false;">Stop</button>
+				<button onclick="Game.stop()" disabled='true'>Stop</button>
 				<br>
 				<a id="debugHolder"></a>
 			</div>
@@ -57,7 +57,7 @@
 		<script src="js/entity.js"></script>
 		<script src="js/draw.js"></script>
 		<script src="js/trainer.js?a=1"></script>
-		<script src="js/game.js?a=2"></script>
+		<script src="js/game.js?a=3"></script>
 	</body>
 </html>
 
