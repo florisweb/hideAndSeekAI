@@ -50,7 +50,7 @@
 		</div>
 
 
-		<script src="/JS/jQuery.js"></script>
+		<script src="https://florisweb.tk/JS/jQuery.js"></script>
 
 		<script src="../js/extraFunctions.js?a=2"></script>
 		<script src="../js/network/neuralNetwork.js"></script>

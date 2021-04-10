@@ -9,6 +9,7 @@ const App = new function() {
   }
 
   this.setup = function() {
+    this.loadDataFromServer();
     this.update();
   }
 
@@ -111,6 +112,27 @@ const App = new function() {
 
     // read as text file
     reader.readAsText(file);
+  }
+
+  this.loadDataFromServer = function() {
+      let xhttp = new XMLHttpRequest();
+
+      xhttp.onerror = function(_e) {
+        console.log("An error accured", _e)
+      }
+
+      xhttp.onload = function (_data) {
+        let response = _data.target;
+        if (response.status != 200) return;
+        let data = JSON.parse(response.response);
+        let result = Game.importData(data);
+        Drawer.update();
+        alert(result ? "Successfully loaded DNA." : "Error while loading DNA.");
+      }
+     
+      xhttp.open("POST", "../serverVersion/data.json?a=" + Math.round(Math.random() * 10000000), true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send();
   }
 
 

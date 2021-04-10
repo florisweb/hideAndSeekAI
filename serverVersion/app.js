@@ -1,16 +1,17 @@
+
 const fs = require('fs')
 
 
 const App = new function() {
 	this.settings = {
-		updateEveryXFrames: 30,
-		dataStoragePath: "data.json"
+		updateEveryXFrames: 500,
+		dataStoragePath: __dirname + "/data.json"
 	}
 
   	this.setup = async function() {
   		await this.importData();
   		generationAtStart = Game.generation;
-    	this.turboTrain(DNA);
+    	await this.turboTrain(DNA);
   	}
   	this.updateStatistics = function() {}
 
