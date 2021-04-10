@@ -126,7 +126,8 @@ const App = new function() {
         if (response.status != 200) return;
         let data = JSON.parse(response.response);
         let result = Game.importData(data);
-        Drawer.update();
+        
+        App.train(Game.curDNA);
         alert(result ? "Successfully loaded DNA." : "Error while loading DNA.");
       }
      

@@ -122,6 +122,7 @@ const Game = new function() {
       Game.updates = Trainer.settings.updatesPerSession * _data.generation;
 
       DNA = _data.DNA;
+      Game.curDNA = DNA;
       Game.walls = new WallConstructor();
       for (wall of _data.walls)
       {
