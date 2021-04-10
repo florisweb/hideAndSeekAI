@@ -32,7 +32,7 @@ const Game = new function() {
     generation: 0,
     frameRate: 10,
 
-    turboMode: false,
+    turboMode: true,
   }
 
 
@@ -360,5 +360,5 @@ for (let i = 0; i < walls; i++)
 Drawer.update();
 
 
-let DNA = Trainer.createRandomDNA(30);
+let DNA = Trainer.createRandomDNA(32);
 

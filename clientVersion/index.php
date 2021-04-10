@@ -52,15 +52,15 @@
 
 		<script src="/JS/jQuery.js"></script>
 
-		<script src="js/extraFunctions.js?a=2"></script>
-		<script src="js/network/neuralNetwork.js"></script>
+		<script src="../js/extraFunctions.js?a=2"></script>
+		<script src="../js/network/neuralNetwork.js"></script>
 		<script src="js/statistics.js"></script>
 		<script src="js/neuralDrawer.js?a=2"></script>
-		<script src="js/collision.js"></script>
-		<script src="js/entity.js"></script>
+		<script src="../js/collision.js"></script>
+		<script src="../js/entity.js"></script>
 		<script src="js/draw.js"></script>
-		<script src="js/trainer.js?a=1"></script>
-		<script src="js/game.js?a=3"></script>
+		<script src="../js/trainer.js?a=1"></script>
+		<script src="../js/game.js?a=3"></script>
 	</body>
 </html>
 
