@@ -110,7 +110,7 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
   function projectRayOnWall(_rayAngle, _wall) {
     let rayAngle = angleTo2PIRange(_rayAngle);
 
-    for (let rayS = 0; rayS < eyeRange; rayS++)
+    for (let rayS = 0; rayS < eyeRange; rayS += eyeStepSize)
     {
       let rayX = Math.cos(rayAngle) * rayS;
       let rayY = -Math.sin(rayAngle) * rayS;

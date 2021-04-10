@@ -520,7 +520,7 @@ const Trainer = new function() {
   async function doTrainingRound(_DNAlist) {
     addEntities(_DNAlist);
 
-    const updatesPerRun = 1;
+    const updatesPerRun = 10;
     let totalUpdates = 0;
     
     let promise = new Promise(function (resolve, error) {
@@ -630,6 +630,8 @@ const Game = new function() {
 
     walls:    WallConstructor(),
     entities: EntityConstructor(),
+    curDNA:   [],
+
     update: update,
     stop: stop,
     runXUpdates: runXUpdates,
@@ -695,6 +697,7 @@ const Game = new function() {
       if (!Game.running) return DNA;
 
       DNA = await Trainer.animateTrainingRound(DNA);
+      This.curDNA = DNA;
       return run();
     }
   }
@@ -709,6 +712,7 @@ const Game = new function() {
       if (!Game.running) return DNA;
 
       DNA = await Trainer.doTrainingRound(DNA);
+      This.curDNA = DNA;
       return run();
     }
   }
@@ -722,7 +726,7 @@ const Game = new function() {
 
   function exportData() {
     let obj = {
-      DNA:          DNA,
+      DNA:          Game.curDNA,
       generation:   Game.generation,
       walls:        Game.walls,
       config:       Trainer.settings,
@@ -735,6 +739,7 @@ const Game = new function() {
       if (!_data) return;
       if (!_data.DNA.length || _data.DNA.length % 2 != 0) return alert("Invalid data-format");
       Trainer.settings = _data.config;
+      Game.generation = _data.generation;
       Game.updates = Trainer.settings.updatesPerSession * _data.generation;
 
       DNA = _data.DNA;
@@ -884,14 +889,18 @@ for (let i = 0; i < walls; i++)
 
 let DNA = Trainer.createRandomDNA(32);
 
+// const fs = require('fs')
 
 
 const App = new function() {
 	this.settings = {
-		updateEveryXFrames: 30
+		updateEveryXFrames: 30,
+		dataStoragePath: "data.json"
 	}
 
-  	this.setup = function() {
+  	this.setup = async function() {
+  		// await this.importData();
+  		generationAtStart = Game.generation;
     	this.turboTrain(DNA);
   	}
   	this.updateStatistics = function() {}
@@ -915,6 +924,7 @@ const App = new function() {
 
 		lastDate        = new Date();
 		lastUpdateCount = Game.updates;
+		// if (Game.generation % 1 == 0) this.exportData();
 	}
 
 
@@ -935,38 +945,32 @@ const App = new function() {
 
 
 
-  // this.downloadData = function() {
-  //   let data = [Game.exportData()];
-  //   var a = window.document.createElement('a');
-  //   a.href = window.URL.createObjectURL(new Blob(data, {type: 'text/txt'}));
-  //   a.download = 'DNA.txt';
+  this.exportData = function() {
+  	console.log("- Export data -");
+    let data = Game.exportData();
 
-  //   // Append anchor to body.
-  //   document.body.appendChild(a);
-  //   a.click();
+	fs.writeFile(App.settings.dataStoragePath, data, err => {
+  		if (err) {
+    		console.error(err)
+    		return
+  		}
+	})
+  }
 
-  //   // Remove anchor from body
-  //   document.body.removeChild(a);
-  // }
+  this.importData = function() {
+  	return new Promise(function (resolve) {
+  		console.log("- Import data - ");
 
-  // this.loadData = function() {
-  //   let file = HTML.dataInput.files[0];
-  //   if (!file) return;
-
-  //   let reader = new FileReader();
-  //   reader.addEventListener('load', function(e) { 
-  //       let data = JSON.parse(e.target.result);
-  //       let result = Game.importData(data);
-  //       Drawer.update();
-  //       alert(result ? "Successfully loaded DNA." : "Error while loading DNA.");
-  //   });
-
-  //   // file reading failed
-  //   reader.addEventListener('error', function() {alert('Error : Failed to read file');});
-
-  //   // read as text file
-  //   reader.readAsText(file);
-  // }
+	    fs.readFile(App.settings.dataStoragePath, 'utf8', function (err,_string) {
+		  if (err) {
+		    return console.log(err);
+		  }
+		  let data = JSON.parse(_string);
+		  console.log(Game.importData(data) ? "[!] Successfully loaded data" : "[!] A problem accured while loading the data.");
+		  resolve();
+		});
+  	});
+  }
 }
 
 

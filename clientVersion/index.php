@@ -57,14 +57,14 @@
 		<script src="js/statistics.js"></script>
 		<script src="js/neuralDrawer.js?a=2"></script>
 		<script src="../js/collision.js"></script>
-		<script src="../js/entity.js"></script>
+		<script src="../js/entity.js?a=1"></script>
 		<script src="js/draw.js"></script>
-		<script src="../js/trainer.js?a=1"></script>
-		<script src="../js/game.js?a=4"></script>
+		<script src="../js/trainer.js?a=2"></script>
+		<script src="../js/game.js?a=5"></script>
 		<script src="js/app.js?a=4"></script>
 
 		
-		<!-- <script src="execute.js?a=4"></script> -->
+		<!-- <script src="execute.js?a=6"></script> -->
 	</body>
 </html>
 

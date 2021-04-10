@@ -29,11 +29,11 @@ const App = new function() {
 
 		let timeRunning     = new Date() - timeSinceStart;
 		let deltaGeneration = Game.generation - generationAtStart;
-		console.log("Time per generation: " + Math.round(timeRunning / deltaGeneration / 10) / 100 + "s " + "Running for: " + Math.round(timeRunning / 1000) + "s");
+		console.log("Time per generation: " + Math.round(timeRunning / deltaGeneration / 10) / 100 + "s");
 
 		lastDate        = new Date();
 		lastUpdateCount = Game.updates;
-		if (Game.generation % 1 == 0) this.exportData();
+		if (Game.generation % 5 == 0) this.exportData();
 	}
 
 

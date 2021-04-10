@@ -1,7 +1,7 @@
 
 const entityRadius = 10;
 const eyeRange = 100;
-
+const eyeStepSize = 3;
 
 const Game = new function() {
   const This = {
@@ -9,6 +9,8 @@ const Game = new function() {
 
     walls:    WallConstructor(),
     entities: EntityConstructor(),
+    curDNA:   [],
+
     update: update,
     stop: stop,
     runXUpdates: runXUpdates,
@@ -74,6 +76,7 @@ const Game = new function() {
       if (!Game.running) return DNA;
 
       DNA = await Trainer.animateTrainingRound(DNA);
+      This.curDNA = DNA;
       return run();
     }
   }
@@ -88,6 +91,7 @@ const Game = new function() {
       if (!Game.running) return DNA;
 
       DNA = await Trainer.doTrainingRound(DNA);
+      This.curDNA = DNA;
       return run();
     }
   }
@@ -101,7 +105,7 @@ const Game = new function() {
 
   function exportData() {
     let obj = {
-      DNA:          DNA,
+      DNA:          Game.curDNA,
       generation:   Game.generation,
       walls:        Game.walls,
       config:       Trainer.settings,
@@ -112,7 +116,7 @@ const Game = new function() {
 
   function importData(_data) {
       if (!_data) return;
-      if (!_data.DNA.length || _data.DNA.length % 2 != 0) return alert("Invalid data-format");
+      if (!_data.DNA.length || _data.DNA.length % 2 != 0) return console.log("Invalid data-format");
       Trainer.settings = _data.config;
       Game.generation = _data.generation;
       Game.updates = Trainer.settings.updatesPerSession * _data.generation;
@@ -262,5 +266,5 @@ for (let i = 0; i < walls; i++)
 }
 
 
-let DNA = Trainer.createRandomDNA(32);
+let DNA = Trainer.createRandomDNA(30);
 
