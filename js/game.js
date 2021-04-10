@@ -1,45 +1,34 @@
+
 const entityRadius = 10;
 const eyeRange = 100;
 
 
-
-
 const Game = new function() {
-  const HTML = {
-    turboButton:  $("#header button")[0],
-    startButton:  $("#header button")[1],
-    stopButton:   $("#header button")[2],
-
-    dataInput:    dataInput,
-  }
-
   const This = {
+    worldSize: [800, 800],
+
     walls:    WallConstructor(),
     entities: EntityConstructor(),
     update: update,
-    run: run,
-    stop: stopRunning,
+    stop: stop,
     runXUpdates: runXUpdates,
 
     turboTrain: turboTrain,
     train: train,
 
-    downloadData: downloadData,
-    loadData:     loadData,
+    exportData: exportData,
+    importData: importData,
 
     running: true,
     updates: 0,
     generation: 0,
     frameRate: 10,
 
-    turboMode: true,
+    turboMode: false,
   }
+  This.worldDiagonal = Math.sqrt(This.worldSize[0] * This.worldSize[0] + This.worldSize[1] * This.worldSize[1]);
 
 
-  let lastDate = new Date();
-  let lastUpdateCount = 0;
-  let timeSinceStart = new Date();
-  let generationAtStart = 0;
 
   function update() {
     for (let i = This.entities.length - 1; i >= 0; i--)
@@ -51,47 +40,17 @@ const Game = new function() {
       }
       This.entities[i].update();
     }
-
-    if (!This.turboMode) Drawer.update();
     
     This.updates++;
-    if (This.updates % (NeuralDrawer.settings.updateEveryXFrames * (1 + 4 * This.turboMode)) != 0) return;
-  
-    This.generation       =   Math.round(This.updates / Trainer.settings.updatesPerSession * 10) / 10;
-    debugHolder.innerHTML =   Math.round(window.fps * 10) / 10 + " fps <br>" + 
-                              This.generation + " generations"; 
-    
-
-    window.fps      = (This.updates - lastUpdateCount) / (new Date() - lastDate) * 1000;
-    lastDate        = new Date();
-    lastUpdateCount = This.updates;
-
-    
-    if (!This.turboMode) 
-    {
-      NeuralDrawer.drawNetwork(Game.entities[0].brain.layers);
-      return;
-    }
-    
-    let timeRunning                   = new Date() - timeSinceStart;
-    let deltaGeneration               = This.generation - generationAtStart;
-
-    turbo_timePerGenHolder.innerHTML  = "Time per generation: " + Math.round(timeRunning / deltaGeneration / 10) / 100 + "s";
-    turbo_runningFor.innerHTML        = "Running for: " + Math.round(timeRunning / 1000) + "s";  
+    This.generation = Math.round(This.updates / Trainer.settings.updatesPerSession * 10) / 10;
   }
 
-  function run() {
-    update();
-    setButtonRunStatus(true);
-  
-    if (This.running) setTimeout(Game.run, This.frameRate);
-  }
 
   function runXUpdates(_x = 0, _onFinish) {
-    update();
+    App.update();
 
     if (_x > 0) 
-      setTimeout(Game.runXUpdates, This.frameRate, _x - 1, _onFinish);
+      setTimeout(Game.runXUpdates, Game.frameRate, _x - 1, _onFinish);
     else 
       try {
         _onFinish();
@@ -101,30 +60,7 @@ const Game = new function() {
 
 
 
-  function turboTrain(_DNA) {
-    Game.running = true;
-    Game.turboMode = true;
-    mainContent.classList.add('turboMode');
-    timeSinceStart = new Date();
-    generationAtStart = This.generation;
-
-    
-    let DNA = _DNA;
-    setButtonRunStatus(true);
-    return run();
-
-    async function run() {
-      if (!Game.running) 
-      {
-        setButtonRunStatus(false);
-        mainContent.classList.remove('turboMode'); 
-        return DNA;
-      }
-
-      DNA = await Trainer.doTrainingRound(DNA);
-      return run();
-    }
-  }
+ 
 
 
   function train(_DNA) {
@@ -132,99 +68,68 @@ const Game = new function() {
     Game.turboMode = false;
     
     let DNA = _DNA;
-    setButtonRunStatus(true);
     return run();
 
     async function run() {
-      if (!Game.running) 
-      {
-        setButtonRunStatus(false);
-        return DNA;
-      }
+      if (!Game.running) return DNA;
 
       DNA = await Trainer.animateTrainingRound(DNA);
       return run();
     }
   }
 
+  function turboTrain(_DNA) {
+    Game.running = true;
+    Game.turboMode = true;    
+    let DNA = _DNA;
+    return run();
 
+    async function run() {
+      if (!Game.running) return DNA;
 
-  function stopRunning() {
+      DNA = await Trainer.doTrainingRound(DNA);
+      return run();
+    }
+  }
+
+  function stop() {
     This.running = false;
   }
 
 
-  function setButtonRunStatus(_running = false) {
-    HTML.turboButton.disabled = _running;
-    HTML.startButton.disabled = _running;
-    HTML.stopButton.disabled  = !_running;
-  }
 
 
-
-
-
-
-
-
-  function downloadData() {
+  function exportData() {
     let obj = {
       DNA:          DNA,
-      generation:   This.generation,
-      walls:        This.walls
+      generation:   Game.generation,
+      walls:        Game.walls,
+      config:       Trainer.settings,
     };
 
-    let data = [JSON.stringify(obj)];
-    var a = window.document.createElement('a');
-    a.href = window.URL.createObjectURL(new Blob(data, {type: 'text/txt'}));
-    a.download = 'DNA.txt';
-
-    // Append anchor to body.
-    document.body.appendChild(a);
-    a.click();
-
-    // Remove anchor from body
-    document.body.removeChild(a);
+    return JSON.stringify(obj);
   }
 
-  function loadData() {
-    let file = HTML.dataInput.files[0];
-    if (!file) return;
+  function importData(_data) {
+      if (!_data) return;
+      if (!_data.DNA.length || _data.DNA.length % 2 != 0) return alert("Invalid data-format");
+      Trainer.settings = _data.config;
+      Game.generation = _data.generation;
+      Game.updates = Trainer.settings.updatesPerSession * _data.generation;
 
-    let reader = new FileReader();
-    reader.addEventListener('load', function(e) { 
-        let data = JSON.parse(e.target.result);
-        if (!data) return;
-        if (!data.DNA.length || data.DNA.length % 2 != 0) return alert("Invalid data-format");
-        
-        console.log(data);
-
-        DNA = data.DNA;
-        This.updates = Trainer.settings.updatesPerSession * data.generation;
-
-        This.walls = new WallConstructor();
-        for (wall of data.walls)
-        {
-          This.walls.addWall(
-            wall.x,
-            wall.y,
-            wall.width,
-            wall.height
-          );
-        }
-        Drawer.update();
-        alert("Successfully loaded DNA.")
-    });
-
-    // file reading failed
-    reader.addEventListener('error', function() {alert('Error : Failed to read file');});
-
-    // read as text file
-    reader.readAsText(file);
+      DNA = _data.DNA;
+      Game.walls = new WallConstructor();
+      for (wall of _data.walls)
+      {
+        Game.walls.addWall(
+          wall.x,
+          wall.y,
+          wall.width,
+          wall.height
+        );
+      }
+      return true;
   }
-
-
-
 
 
   return This;
@@ -338,26 +243,23 @@ function EntityConstructor() {
 
 // Add the world walls
 const wallThickness = 50;
-Game.walls.addWall(-wallThickness, -wallThickness - 1, Drawer.canvas.width + 2 * wallThickness, wallThickness);
-Game.walls.addWall(-wallThickness, Drawer.canvas.height + 1, Drawer.canvas.width + 2 * wallThickness, wallThickness);
+Game.walls.addWall(-wallThickness, -wallThickness - 1, Game.worldSize[0] + 2 * wallThickness, wallThickness);
+Game.walls.addWall(-wallThickness, Game.worldSize[1] + 1, Game.worldSize[0] + 2 * wallThickness, wallThickness);
 
-Game.walls.addWall(-wallThickness - 1, -wallThickness, wallThickness, Drawer.canvas.height + 2 * wallThickness);
-Game.walls.addWall(Drawer.canvas.width + 1, -wallThickness, wallThickness, Drawer.canvas.height + 2 * wallThickness);
+Game.walls.addWall(-wallThickness - 1, -wallThickness, wallThickness, Game.worldSize[1] + 2 * wallThickness);
+Game.walls.addWall(Game.worldSize[0] + 1, -wallThickness, wallThickness, Game.worldSize[1] + 2 * wallThickness);
 
 
 const walls = Math.round(20 * Math.random());
 for (let i = 0; i < walls; i++) 
 {
   Game.walls.addWall(
-    Drawer.canvas.width * Math.random(), 
-    Drawer.canvas.height * Math.random(),
+    Game.worldSize[0] * Math.random(), 
+    Game.worldSize[1] * Math.random(),
     200 * Math.random(),
     200 * Math.random(),
   );
 }
-
-
-Drawer.update();
 
 
 let DNA = Trainer.createRandomDNA(32);

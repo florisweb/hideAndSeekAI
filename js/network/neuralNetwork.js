@@ -1,8 +1,6 @@
 
 
 
-
-
 function NeuralNetwork(_structure) {
 	let This = {
 		layers: [],

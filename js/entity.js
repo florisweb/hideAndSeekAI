@@ -42,7 +42,7 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
     
     This.totalDistanceToTarget += distanceToTarget;
 
-    let inputs = [distanceToTarget / Drawer.canvasDiagonal];
+    let inputs = [distanceToTarget / Game.worldDiagonal];
     
 
     inputs[1] = angleTo2PIRange(

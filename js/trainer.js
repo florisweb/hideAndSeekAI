@@ -1,7 +1,5 @@
 
 
-
-
 const Trainer = new function() {
   const This = {
     doTrainingRound:      doTrainingRound,
@@ -10,9 +8,9 @@ const Trainer = new function() {
 
     addEntities:          addEntities,
     settings: {
-      seekerSpawn: {x: 600, y: 100},
-      hiderSpawn: {x: 95, y: 90},
-      updatesPerSession: 500,
+      seekerSpawn:        {x: 600, y: 100},
+      hiderSpawn:         {x: 95, y: 90},
+      updatesPerSession:  500,
     }
   }
 
@@ -58,9 +56,9 @@ const Trainer = new function() {
       if (totalUpdates > This.settings.updatesPerSession) return resolver();
 
       totalUpdates += updatesPerRun;
-      for (let i = 0; i < updatesPerRun; i++) Game.update();
+      for (let i = 0; i < updatesPerRun; i++) App.update();
       
-      requestAnimationFrame(function () {run(resolver)});
+      setTimeout(function () {run(resolver)}, 1);
     }
 
     await promise;
@@ -107,15 +105,7 @@ const Trainer = new function() {
     });
 
 
-    let bestSeekerScore = 1 / entities.seekers[0].score;
-    let bestHiderScore = entities.hiders[0].score;
-    let averageScore = totalHiderScore / entities.hiders.length;
-    
-    Statistics.update([
-      [bestSeekerScore, Drawer.canvasDiagonal], 
-      [bestHiderScore, Drawer.canvasDiagonal], 
-      [averageScore, Drawer.canvasDiagonal]
-    ]);
+    App.updateStatistics(entities, totalHiderScore);
 
     let newDNA = [];
     
@@ -138,7 +128,6 @@ const Trainer = new function() {
 
 
 
-
   function mutateBrain(_brainDNA) {
     const mutationRate = .1;
     const mutationChance = .5;
@@ -153,7 +142,6 @@ const Trainer = new function() {
 
     return newDNA;
   }
-
 
   return This; 
 }

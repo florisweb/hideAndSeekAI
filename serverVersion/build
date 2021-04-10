@@ -1,0 +1,9 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+echo - Building JavaScript
+
+cat ../js/extraFunctions.js ../js/network/neuralNetwork.js ../js/collision.js ../js/entity.js ../js/trainer.js ../js/game.js app.js > execute.js
+
+echo \|-------------------\|
+echo \| Finished Building \|
+echo \|-------------------\|

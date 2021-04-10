@@ -30,12 +30,12 @@
 		
 		<div id="sideBar">	
 			<div id="header">
-				<button onclick="Game.turboTrain(DNA).then(function (_DNA) {DNA = _DNA});">Turbo</button>
-				<button onclick="Game.train(DNA).then(function (_DNA) {DNA = _DNA});">Run</button>
-				<button onclick="Game.stop()" disabled='true'>Stop</button>
+				<button onclick="App.turboTrain(DNA).then(function (_DNA) {DNA = _DNA});">Turbo</button>
+				<button onclick="App.train(DNA).then(function (_DNA) {DNA = _DNA});">Run</button>
+				<button onclick="App.stop()" disabled='true'>Stop</button>
 				<br>
-				<button onclick="Game.downloadData()">Download DNA</button>
-				<input type='file' id="dataInput" oninput='Game.loadData()'>
+				<button onclick="App.downloadData()">Download DNA</button>
+				<input type='file' id="dataInput" oninput='App.loadData()'>
 				<br>
 				<div class='text' id="debugHolder"></div>
 			</div>
@@ -60,7 +60,11 @@
 		<script src="../js/entity.js"></script>
 		<script src="js/draw.js"></script>
 		<script src="../js/trainer.js?a=1"></script>
-		<script src="../js/game.js?a=3"></script>
+		<script src="../js/game.js?a=4"></script>
+		<script src="js/app.js?a=4"></script>
+
+		
+		<!-- <script src="execute.js?a=4"></script> -->
 	</body>
 </html>
 
