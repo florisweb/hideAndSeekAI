@@ -9,12 +9,13 @@ const App = new function() {
 	}
 
   	this.setup = async function() {
-  		await this.importData();
+  		let result = await this.importData();
   		generationAtStart = Game.generation;
-    	await this.turboTrain(DNA);
+  		if (!result) Game.curDNA = Trainer.createRandomDNA(30);
+  		if (!result) console.log("[!] Successfully created new DNA");
+    	await this.turboTrain();
   	}
   	this.updateStatistics = function() {}
-
 
 	let lastDate = new Date();
 	let lastUpdateCount = 0;
@@ -38,15 +39,12 @@ const App = new function() {
 	}
 
 
-	this.turboTrain = async function(_DNA) {
+	this.turboTrain = async function() {
 		console.log("== Started turbo-training ==");
-		let result = await Game.turboTrain(_DNA);
+		Game.curDNA = await Game.turboTrain(Game.curDNA);
 		console.log("== Stopped turbo-training ==");
-		return result;
+		return Game.curDNA;
 	}
-
-
-
 
 
 
@@ -76,8 +74,9 @@ const App = new function() {
 		    return console.log(err);
 		  }
 		  let data = JSON.parse(_string);
-		  console.log(Game.importData(data) ? "[!] Successfully loaded data" : "[!] A problem accured while loading the data.");
-		  resolve();
+		  let result = Game.importData(data);
+		  console.log(result ? "[!] Successfully loaded data" : "[!] A problem accured while loading the data.");
+		  resolve(result);
 		});
   	});
   }

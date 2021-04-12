@@ -8,9 +8,9 @@ const App = new function() {
     dataInput:    dataInput,
   }
 
-  this.setup = function() {
-    this.loadDataFromServer();
-    this.update();
+  this.setup = async function() {
+    let result = await this.loadDataFromServer();
+    if (!result) Game.curDNA = Trainer.createRandomDNA(30);
   }
 
   let lastDate = new Date();
@@ -51,24 +51,24 @@ const App = new function() {
     Game.stop();
   }
 
-  this.train = async function(_DNA) {
+  this.train = async function() {
     setButtonRunStatus(true);
-    let result = await Game.train(_DNA);
+    Game.curDNA = await Game.train(Game.curDNA);
     setButtonRunStatus(false);
-    return result;
+    return Game.curDNA;
   }
 
-  this.turboTrain = async function(_DNA) {
+  this.turboTrain = async function() {
     mainContent.classList.add('turboMode');
     timeSinceStart    = new Date();
     generationAtStart = Game.generation;
 
     setButtonRunStatus(true);
-    let result = await Game.turboTrain(_DNA);
+    Game.curDNA = await Game.turboTrain(Game.curDNA);
     
     setButtonRunStatus(false);
     mainContent.classList.remove('turboMode'); 
-    return result;
+    return Game.curDNA;
   }
 
 
@@ -96,25 +96,30 @@ const App = new function() {
   }
 
   this.loadData = function() {
-    let file = HTML.dataInput.files[0];
-    if (!file) return;
+    return new Promise(function (resolve) {
 
-    let reader = new FileReader();
-    reader.addEventListener('load', function(e) { 
-        let data = JSON.parse(e.target.result);
-        let result = Game.importData(data);
-        Drawer.update();
-        alert(result ? "Successfully loaded DNA." : "Error while loading DNA.");
+      let file = HTML.dataInput.files[0];
+      if (!file) return;
+
+      let reader = new FileReader();
+      reader.addEventListener('load', function(e) { 
+          let data = JSON.parse(e.target.result);
+          let result = Game.importData(data);
+          resolve(result);
+          Drawer.update();
+          alert(result ? "Successfully loaded DNA." : "Error while loading DNA.");
+      });
+
+      // file reading failed
+      reader.addEventListener('error', function() {alert('Error : Failed to read file');});
+
+      // read as text file
+      reader.readAsText(file);
     });
-
-    // file reading failed
-    reader.addEventListener('error', function() {alert('Error : Failed to read file');});
-
-    // read as text file
-    reader.readAsText(file);
   }
 
   this.loadDataFromServer = function() {
+    return new Promise(function (resolve) {
       let xhttp = new XMLHttpRequest();
 
       xhttp.onerror = function(_e) {
@@ -126,14 +131,16 @@ const App = new function() {
         if (response.status != 200) return;
         let data = JSON.parse(response.response);
         let result = Game.importData(data);
+        resolve(result);
         
-        App.train(Game.curDNA);
+        if (result) App.train(Game.curDNA);
         alert(result ? "Successfully loaded DNA." : "Error while loading DNA.");
       }
      
       xhttp.open("POST", "../serverVersion/data.json?a=" + Math.round(Math.random() * 10000000), true);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.send();
+    });
   }
 
 

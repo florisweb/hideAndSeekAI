@@ -115,14 +115,13 @@ const Game = new function() {
   }
 
   function importData(_data) {
-      if (!_data) return;
-      if (!_data.DNA.length || _data.DNA.length % 2 != 0) return console.log("Invalid data-format");
+      if (!_data) return false;
+      if (!_data.DNA.length || _data.DNA.length % 2 != 0) {console.log("Invalid data-format"); return false;}
       Trainer.settings = _data.config;
       Game.generation = _data.generation;
       Game.updates = Trainer.settings.updatesPerSession * _data.generation;
 
-      DNA = _data.DNA;
-      Game.curDNA = DNA;
+      Game.curDNA = _data.DNA;
       Game.walls = new WallConstructor();
       for (wall of _data.walls)
       {
@@ -266,6 +265,4 @@ for (let i = 0; i < walls; i++)
   );
 }
 
-
-let DNA = Trainer.createRandomDNA(30);
 
