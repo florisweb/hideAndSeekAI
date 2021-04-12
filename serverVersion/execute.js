@@ -901,7 +901,7 @@ const App = new function() {
   		let result = await this.importData();
   		generationAtStart = Game.generation;
   		if (!result) Game.curDNA = Trainer.createRandomDNA(30);
-  		if (!result) console.log("- Successfully created new DNA");
+  		if (!result) console.log("[!] Successfully created new DNA");
     	await this.turboTrain();
   	}
   	this.updateStatistics = function() {}
@@ -957,6 +957,7 @@ const App = new function() {
   this.importData = function() {
   	return new Promise(function (resolve) {
   		console.log("- Import data - ");
+  		if (!fs.existsSync(App.settings.dataStoragePath)) return resolve(false);
 
 	    fs.readFile(App.settings.dataStoragePath, 'utf8', function (err,_string) {
 		  if (err) {

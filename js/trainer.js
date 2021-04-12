@@ -72,8 +72,8 @@ const Trainer = new function() {
     Game.entities.clear();
     for (entity of _DNAlist)
     {
-      if (entity.type == "seeker") Game.entities.addEntity(Trainer.settings.seekerSpawn.x, Trainer.settings.seekerSpawn.y, Math.PI, 10, entity.DNA, entity.type);
-      if (entity.type == "hider") Game.entities.addEntity(Trainer.settings.hiderSpawn.x, Trainer.settings.hiderSpawn.y, Math.PI, 10, entity.DNA, entity.type);
+      if (entity.type == "seeker") Game.entities.addEntity(Trainer.settings.seekerSpawn.x, Trainer.settings.seekerSpawn.y, Math.PI, 10, 3, entity.DNA, entity.type);
+      if (entity.type == "hider") Game.entities.addEntity(Trainer.settings.hiderSpawn.x, Trainer.settings.hiderSpawn.y, Math.PI, 10, 3, entity.DNA, entity.type);
     }
   }
 

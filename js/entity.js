@@ -1,10 +1,11 @@
 
-function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
+function entityConstructor({x, y, angle, eyes, memoryNeurons, DNA, type, target}) {
   let This = {
     x: x,
     y: y,
     angle: angle,
     eyes: eyes,
+    memoryNeurons: memoryNeurons,
 
     DNA: DNA,
 
@@ -18,9 +19,10 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
     update: update,
     totalDistanceToTarget: 0,
   }
-
+  
+  let memory = [];
+  for (let i = 0; i < memoryNeurons; i++) memory[i] = 0;
   This.brain = createBrain(DNA);
-
 
 
   function update() {
@@ -54,12 +56,15 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
     ) / Math.PI / 2;
 
 
-
     let eyeData = getEyeData();
     inputs = inputs.concat(eyeData);
+    inputs = inputs.concat(memory);
+
+
 
 
     let outputs = This.brain.feedForward(inputs);
+    memory = Object.assign([], outputs).splice(2, memoryNeurons);
 
     This.angle += (.5 - outputs[1]) * turnConstant;
    
@@ -137,9 +142,9 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
 
 
   function createBrain(_brainDNA) {
-    const outputNeurons = 2;
+    const outputNeurons = 2 + This.memoryNeurons;
 
-    let brainStructure = [This.eyes + 3]; 
+    let brainStructure = [This.eyes + 3 + This.memoryNeurons]; 
     let layers = Math.abs(Math.round(_brainDNA[0]));
 
     let newBrainDNA = Object.assign([], _brainDNA);
@@ -178,7 +183,6 @@ function entityConstructor({x, y, angle, eyes, DNA, type, target}) {
     }
 
     brainStructure.push(outputNeurons); // outputs
-
 
     if (supposedBrainDNASize > newBrainDNA.length)
     {

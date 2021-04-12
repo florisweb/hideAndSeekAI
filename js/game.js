@@ -175,12 +175,13 @@ function WallConstructor() {
 function EntityConstructor() {
   const Entities = [];
 
-  Entities.addEntity = function(_x, _y, _angle, _eyes, _brainDNA, _type = "seeker") {
+  Entities.addEntity = function(_x, _y, _angle, _eyes, _memoryNeurons, _brainDNA, _type = "seeker") {
     let entity = new entityConstructor({
       x: _x, 
       y: _y, 
       angle: _angle, 
       eyes: _eyes,
+      memoryNeurons: _memoryNeurons,
       DNA: _brainDNA,
       type: _type,
     });

@@ -68,6 +68,7 @@ const App = new function() {
   this.importData = function() {
   	return new Promise(function (resolve) {
   		console.log("- Import data - ");
+  		if (!fs.existsSync(App.settings.dataStoragePath)) return resolve(false);
 
 	    fs.readFile(App.settings.dataStoragePath, 'utf8', function (err,_string) {
 		  if (err) {
