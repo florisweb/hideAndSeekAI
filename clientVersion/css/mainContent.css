@@ -4,7 +4,7 @@
 	position: relative;
 	float: left;
 	
-	width: calc(100vw - 450px);
+	width: 100vh;
 	height: 100vh;
 
 	text-align: center;
@@ -14,7 +14,7 @@
 	position: absolute;
 	top: 0;
 	height: 100vh;
-	width: 100%;
+	width: 100vh;
 
 	transition: opacity .3s;
 }

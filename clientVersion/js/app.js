@@ -24,8 +24,8 @@ const App = new function() {
     if (!Game.turboMode) Drawer.update();
     if (Game.updates % (NeuralDrawer.settings.updateEveryXFrames * (1 + 4 * Game.turboMode)) != 0) return;
   
-    debugHolder.innerHTML =   Math.round(window.fps * 10) / 10 + " fps <br>" + 
-                              Game.generation + " generations"; 
+    debugHolder.innerHTML =   "<div style='width: 80px; float: left'>" + Math.round(window.fps * 10) / 10 + " fps</div>" + 
+                              "<div style='float: left'>" + Game.generation + " generations</div>"; 
     
 
     window.fps      = (Game.updates - lastUpdateCount) / (new Date() - lastDate) * 1000;

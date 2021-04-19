@@ -2,10 +2,9 @@
 <html>
 	<head>
 
-		<link rel="stylesheet" type="text/css" href="css/main.css?a=2">
-		<link rel="stylesheet" type="text/css" href="css/mainContent.css">
+		<link rel="stylesheet" type="text/css" href="css/main.css?a=3">
+		<link rel="stylesheet" type="text/css" href="css/mainContent.css?a=2">
 		<style>
-		
 		</style>
 		<title>Hide and Seek AI</title>
 	</head>
@@ -41,11 +40,9 @@
 			</div>
 			
 			
-			<canvas id="networkCanvas" width="900" height="800"></canvas>
-			
-			
+			<canvas id="networkCanvas" width="800" height="900"></canvas>
 
-			<canvas id="populationGraph" width="300" height="400"></canvas>
+			<canvas id="populationGraph" width="500" height="400"></canvas>
 
 		</div>
 
@@ -55,13 +52,13 @@
 		<script src="../js/extraFunctions.js?a=3"></script>
 		<script src="../js/network/neuralNetwork.js"></script>
 		<script src="js/statistics.js"></script>
-		<script src="js/neuralDrawer.js?a=2"></script>
+		<script src="js/neuralDrawer.js?a=3"></script>
 		<script src="../js/collision.js"></script>
 		<script src="../js/entity.js?a=3"></script>
 		<script src="js/draw.js"></script>
 		<script src="../js/trainer.js?a=4"></script>
 		<script src="../js/game.js?a=9"></script>
-		<script src="js/app.js?a=8"></script>
+		<script src="js/app.js?a=9"></script>
 	</body>
 </html>
 

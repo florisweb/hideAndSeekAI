@@ -11,6 +11,8 @@ const NeuralDrawer = new function() {
   		updateEveryXFrames: 20
   	}
   }
+
+  This.canvas.addEventListener("mousemove", handleMouseMove);
   
   const ctx = This.canvas.getContext("2d");
   ctx.constructor.prototype.circle = function(x, y, size) {
@@ -34,49 +36,86 @@ const NeuralDrawer = new function() {
   const nodeRadius = 22;
   const offsetX = 30;
 
+  let curNodePosition = false;
+  function handleMouseMove(_e) {
+    if (!curNetwork) return;
+    let x = _e.offsetX / This.canvas.offsetWidth * This.canvas.width;
+    let y = _e.offsetY / This.canvas.offsetHeight * This.canvas.height;
+
+    curNodePosition = false;
+    for (let l = 0; l < curNetwork.length; l++)
+    {
+      for (let i = 0; i < curNetwork[l].a.length; i++)
+      {
+        let coords = getXYFromLayerIndex(l, i);
+        let squaredDistance = Math.pow(coords.x - x, 2) + Math.pow(coords.y - y, 2);
+        if (squaredDistance > Math.pow(nodeRadius, 2)) continue;
+        curNodePosition = {
+          l: l,
+          i: i,
+        };
+      }
+    }
+    draw();
+  }
+
   let curNetwork;
   function drawNetwork(_network) {
-  	curNetwork = _network;
-  	ctx.clearRect(0, 0, This.canvas.width, This.canvas.height);
+    curNetwork = _network;
+    draw();
+  }
 
-  	for (let l = 1; l < _network.length; l++)
-  	{
-  		for (let i = 0; i < _network[l].a.length; i++)
-  		{
-  			let weights = _network[l].w[i];
-  			for (let w = 0; w < weights.length; w++)
-  			{	
+  function draw() {
+    if (!curNetwork) return;
+    ctx.clearRect(0, 0, This.canvas.width, This.canvas.height);
 
-  				drawWeight(
-  					l - 1, 
-  					w,
-  					i,
-  					weights[w]
-  				);
-  			}
-  		}
-  	}
+    for (let l = 1; l < curNetwork.length; l++)
+    {
+      for (let i = 0; i < curNetwork[l].a.length; i++)
+      {
+        let weights = curNetwork[l].w[i];
+        for (let w = 0; w < weights.length; w++)
+        { 
+          if (curNodePosition)
+          {
+            if (curNodePosition.l == l && curNodePosition.i != i) continue;
+            if (curNodePosition.l + 1== l && curNodePosition.i != w) continue;
 
-  	for (let l = 0; l < _network.length; l++)
-  	{
-  		for (let i = 0; i < _network[l].a.length; i++)
-  		{
-  			drawNode(l, i, _network[l].a[i]);
-  		}
-  	}
+          }
+          drawWeight(
+            l - 1, 
+            w,
+            i,
+            weights[w]
+          );
+        }
+      }
+    }
+
+    for (let l = 0; l < curNetwork.length; l++)
+    {
+      for (let i = 0; i < curNetwork[l].a.length; i++)
+      {
+        let isCurNode = curNodePosition && curNodePosition.l == l && curNodePosition.i == i
+        drawNode(l, i, curNetwork[l].a[i], isCurNode);
+      }
+    }
   }
 
 
 
-  function drawNode(_layer, _index, _value) {  	
+
+
+  function drawNode(_layer, _index, _value, _highlighted = false) {  	
   	ctx.strokeStyle = "#000"
-  	ctx.fillStyle = valToColour(_value);
+    ctx.lineWidth = 1;
+  	ctx.fillStyle = valToGradientColour(_value);
 
   	let coords = getXYFromLayerIndex(_layer, _index);
   	ctx.circle(
   		coords.x,
   		coords.y,
-  		nodeRadius
+  		nodeRadius + 5 * _highlighted
   	);
   	ctx.stroke();
   	ctx.fill();
@@ -119,9 +158,13 @@ const NeuralDrawer = new function() {
   }
 
 
+  function valToColour(_value) {
+    let scaledVal = 127.5 - 255 * (_value / 2);
+    return "rgb(" + scaledVal + ", " + (255 - scaledVal) + "," + 0 + ")";
+  }
   
 
-  function valToColour(_value) {
+  function valToGradientColour(_value) {
   	let scaledVal = 127.5 - 255 * (_value / 2);
   	return "rgb(" + scaledVal + ", " + scaledVal + "," + scaledVal + ")";
   }
