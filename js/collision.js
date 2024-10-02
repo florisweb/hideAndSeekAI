@@ -11,8 +11,8 @@ const Collision = new function() {
 		let factor = calcFactor(_entity);
 		let coords = applyFactor(_entity, factor);
 
-		_entity.x = coords.x;
-		_entity.y = coords.y;
+		_entity.x = Math.max(0, Math.min(coords.x, Game.worldSize[0]));
+		_entity.y = Math.max(0, Math.min(coords.y, Game.worldSize[1]));
 	}
 
 	function applyFactor(_entity, _factor) {

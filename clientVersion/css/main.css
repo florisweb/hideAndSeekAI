@@ -5,6 +5,7 @@ body {
 	padding: 0;
 	height: 100vh;
 	overflow: hide;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 
@@ -73,7 +74,6 @@ body {
 
 
 .text {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	color: #999;
 	font-size: 15px;
 }
@@ -102,7 +102,13 @@ body {
 	font-size: 13px;
 
 	cursor: pointer;
+	display: inline-block;
 }
+.button.disabled {
+	opacity: .5;
+	pointer-events: none;
+}
+
 	.button.bBoxy {
 		border-radius: 4px;	
 	}

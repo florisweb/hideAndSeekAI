@@ -29,6 +29,19 @@
 		
 		<div id="sideBar">	
 			<div id="header">
+				<div class='button bDefault bBoxy' onclick="App.turboTrain()">Turbo</div>
+				<div class='button bDefault bBoxy' onclick="App.train()">Run</div>
+				<div class='button bDefault bBoxy disabled' onclick="App.stop()">Stop</div>
+				<br>
+				<div class='text' id="debugHolder"></div>
+				<br>
+				<div style='margin: auto; width: 90%; height: 1px; background: #eee; margin-top: 5px; margin-bottom: 15px;'></div>
+
+				<div class='button bDefault bBoxy' onclick="App.downloadData()">Download DNA</div>
+				<input type='file' id="dataInput" oninput='App.loadData()'>
+			</div>
+
+			<!-- <div id="header">
 				<button onclick="App.turboTrain()">Turbo</button>
 				<button onclick="App.train()">Run</button>
 				<button onclick="App.stop()" disabled='true'>Stop</button>
@@ -37,7 +50,7 @@
 				<input type='file' id="dataInput" oninput='App.loadData()'>
 				<br>
 				<div class='text' id="debugHolder"></div>
-			</div>
+			</div> -->
 			
 			
 			<canvas id="networkCanvas" width="800" height="900"></canvas>
@@ -46,8 +59,6 @@
 
 		</div>
 
-
-		<script src="https://florisweb.tk/JS/jQuery.js"></script>
 
 		<script src="../js/extraFunctions.js?a=3"></script>
 		<script src="../js/network/neuralNetwork.js"></script>

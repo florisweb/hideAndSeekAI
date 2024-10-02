@@ -9,6 +9,7 @@ const Game = new function() {
 
     walls:    WallConstructor(),
     entities: EntityConstructor(),
+    generateWalls: generateWalls,
     curDNA:   [],
 
     update: update,
@@ -136,6 +137,43 @@ const Game = new function() {
   }
 
 
+  function generateWalls() {
+    const wallThickness = 50;
+    Game.walls.addWall(-wallThickness, -wallThickness - 1, Game.worldSize[0] + 2 * wallThickness, wallThickness);
+    Game.walls.addWall(-wallThickness, Game.worldSize[1] + 1, Game.worldSize[0] + 2 * wallThickness, wallThickness);
+
+    Game.walls.addWall(-wallThickness - 1, -wallThickness, wallThickness, Game.worldSize[1] + 2 * wallThickness);
+    Game.walls.addWall(Game.worldSize[0] + 1, -wallThickness, wallThickness, Game.worldSize[1] + 2 * wallThickness);
+
+
+    const walls = Math.round(20 * Math.random());
+    while (Game.walls.length < walls + 4)
+    {
+
+      let x = Game.worldSize[0] * Math.random();
+      let y = Game.worldSize[1] * Math.random();  
+      let width = 200 * Math.random();
+      let height = 200 * Math.random();
+
+      if (
+        x < Trainer.settings.seekerSpawn.x && x + width > Trainer.settings.seekerSpawn.x &&
+        y < Trainer.settings.seekerSpawn.y && y + height > Trainer.settings.seekerSpawn.y
+      ) continue;
+      if (
+        x < Trainer.settings.hiderSpawn.x && x + width > Trainer.settings.hiderSpawn.x &&
+        y < Trainer.settings.hiderSpawn.y && y + height > Trainer.settings.hiderSpawn.y
+      ) continue;
+
+
+      Game.walls.addWall(
+        x, y, width, height
+      );
+    }
+
+
+    Drawer.update()
+  }
+
   return This;
 }
 
@@ -244,26 +282,5 @@ function EntityConstructor() {
 
 
 
-
-
-// Add the world walls
-const wallThickness = 50;
-Game.walls.addWall(-wallThickness, -wallThickness - 1, Game.worldSize[0] + 2 * wallThickness, wallThickness);
-Game.walls.addWall(-wallThickness, Game.worldSize[1] + 1, Game.worldSize[0] + 2 * wallThickness, wallThickness);
-
-Game.walls.addWall(-wallThickness - 1, -wallThickness, wallThickness, Game.worldSize[1] + 2 * wallThickness);
-Game.walls.addWall(Game.worldSize[0] + 1, -wallThickness, wallThickness, Game.worldSize[1] + 2 * wallThickness);
-
-
-const walls = Math.round(20 * Math.random());
-for (let i = 0; i < walls; i++) 
-{
-  Game.walls.addWall(
-    Game.worldSize[0] * Math.random(), 
-    Game.worldSize[1] * Math.random(),
-    200 * Math.random(),
-    200 * Math.random(),
-  );
-}
 
 

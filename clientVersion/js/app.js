@@ -1,16 +1,17 @@
 
 const App = new function() {
   const HTML = {
-    turboButton:  $("#header button")[0],
-    startButton:  $("#header button")[1],
-    stopButton:   $("#header button")[2],
+    turboButton:  document.querySelectorAll("#header .button")[0],
+    startButton:  document.querySelectorAll("#header .button")[1],
+    stopButton:   document.querySelectorAll("#header .button")[2],
 
     dataInput:    dataInput,
   }
 
   this.setup = async function() {
     let result = await this.loadDataFromServer();
-    if (!result) Game.curDNA = Trainer.createRandomDNA(30);
+    if (!result) Game.curDNA = Trainer.createRandomDNA(50);
+    Game.generateWalls();
   }
 
   let lastDate = new Date();
@@ -134,7 +135,7 @@ const App = new function() {
         resolve(result);
         
         if (result) App.train(Game.curDNA);
-        alert(result ? "Successfully loaded DNA." : "Error while loading DNA.");
+        if (result) alert("Successfully loaded DNA from server.");
       }
      
       xhttp.open("POST", "../serverVersion/data.json?a=" + Math.round(Math.random() * 10000000), true);
@@ -146,9 +147,9 @@ const App = new function() {
 
 
   function setButtonRunStatus(_running = false) {
-    HTML.turboButton.disabled = _running;
-    HTML.startButton.disabled = _running;
-    HTML.stopButton.disabled  = !_running;
+    HTML.turboButton.classList.toggle('disabled', _running)
+    HTML.startButton.classList.toggle('disabled', _running)
+    HTML.stopButton.classList.toggle('disabled', !_running)
   }
 
 

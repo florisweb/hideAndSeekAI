@@ -1,7 +1,7 @@
 
 const Statistics = new function() {
 	let This = {
-		canvas: $("#populationGraph")[0],
+		canvas: document.querySelector("#populationGraph"),
 		update: update,
 		shiftCanvas: shiftCanvas,
 		settings: {
